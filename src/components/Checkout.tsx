@@ -48,19 +48,25 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
       ? (pickupTime === 'custom' ? customTime : `${pickupTime} minutes`)
       : '';
     
+    const formatTime = (timeString: string) => {
+      if (!timeString) return '';
+      // Parse time in HH:MM format
+      const [hour, minute] = timeString.split(':');
+      
+      // Convert 24-hour to 12-hour format
+      const hourNum = parseInt(hour);
+      const period = hourNum >= 12 ? 'PM' : 'AM';
+      const hour12 = hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
+      
+      return `${hour12}:${minute} ${period}`;
+    };
+    
     const dineInInfo = serviceType === 'dine-in' 
-      ? `👥 Party Size: ${partySize} person${partySize !== 1 ? 's' : ''}\n🕐 Preferred Time: ${new Date(dineInTime).toLocaleString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric', 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        })}`
+      ? `👥 Party Size: ${partySize} person${partySize !== 1 ? 's' : ''}\n🕐 Preferred Time: ${formatTime(dineInTime)}`
       : '';
     
     const orderDetails = `
-🛒 ClickEats ORDER
+🛒 Natalna's Restaurant ORDER
 
 👤 Customer: ${customerName}
 📞 Contact: ${contactNumber}
@@ -95,20 +101,20 @@ ${serviceType === 'delivery' ? `🛵 DELIVERY FEE:` : ''}
 
 ${notes ? `📝 Notes: ${notes}` : ''}
 
-Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
+Please confirm this order to proceed. Thank you for choosing Natalna's Restaurant! 🍽️
     `.trim();
 
     const encodedMessage = encodeURIComponent(orderDetails);
-    const messengerUrl = `https://m.me/61579693577478?text=${encodedMessage}`;
+    const messengerUrl = `https://m.me/Natalnaph?text=${encodedMessage}`;
     
     window.open(messengerUrl, '_blank');
     
   };
 
-  const isDetailsValid = customerName && contactNumber && 
-    (serviceType !== 'delivery' || address) && 
-    (serviceType !== 'pickup' || (pickupTime !== 'custom' || customTime)) &&
-    (serviceType !== 'dine-in' || (partySize > 0 && dineInTime));
+  const isDetailsValid = customerName.trim() && contactNumber.trim() && 
+    (serviceType !== 'delivery' || address.trim()) && 
+    (serviceType !== 'pickup' || (pickupTime !== 'custom' || customTime.trim())) &&
+    (serviceType !== 'dine-in' || (partySize > 0 && dineInTime.trim()));
 
   if (step === 'details') {
     return (
@@ -121,17 +127,17 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Cart</span>
           </button>
-          <h1 className="text-3xl font-noto font-semibold text-black ml-8">Order Details</h1>
+          <h1 className="text-3xl font-serif font-semibold text-natalna-dark ml-8">Order Details</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Order Summary */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-noto font-medium text-black mb-6">Order Summary</h2>
+            <h2 className="text-2xl font-serif font-medium text-natalna-dark mb-6">Order Summary</h2>
             
             <div className="space-y-4 mb-6">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex items-center justify-between py-2 border-b border-red-100">
+                <div key={item.id} className="flex items-center justify-between py-2 border-b border-natalna-beige">
                   <div>
                     <h4 className="font-medium text-black">{item.name}</h4>
                     {item.selectedVariation && (
@@ -149,8 +155,8 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
               ))}
             </div>
             
-            <div className="border-t border-red-200 pt-4">
-              <div className="flex items-center justify-between text-2xl font-noto font-semibold text-black">
+            <div className="border-t border-natalna-beige pt-4">
+              <div className="flex items-center justify-between text-2xl font-serif font-semibold text-natalna-dark">
                 <span>Total:</span>
                 <span>₱{totalPrice}</span>
               </div>
@@ -159,7 +165,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
 
           {/* Customer Details Form */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-2xl font-noto font-medium text-black mb-6">Customer Information</h2>
+            <h2 className="text-2xl font-serif font-medium text-natalna-dark mb-6">Customer Information</h2>
             
             <form className="space-y-6">
               {/* Customer Information */}
@@ -169,7 +175,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                   type="text"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                   placeholder="Enter your full name"
                   required
                 />
@@ -181,7 +187,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                   type="tel"
                   value={contactNumber}
                   onChange={(e) => setContactNumber(e.target.value)}
-                  className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                   placeholder="09XX XXX XXXX"
                   required
                 />
@@ -202,8 +208,8 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                       onClick={() => setServiceType(option.value as ServiceType)}
                       className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                         serviceType === option.value
-                          ? 'border-red-600 bg-red-600 text-white'
-                          : 'border-red-300 bg-white text-gray-700 hover:border-red-400'
+                          ? 'border-natalna-primary bg-natalna-primary text-white shadow-md'
+                          : 'border-natalna-beige bg-white text-gray-700 hover:border-natalna-secondary'
                       }`}
                     >
                       <div className="text-2xl mb-1">{option.icon}</div>
@@ -222,7 +228,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                       <button
                         type="button"
                         onClick={() => setPartySize(Math.max(1, partySize - 1))}
-                        className="w-10 h-10 rounded-lg border-2 border-red-300 flex items-center justify-center text-red-600 hover:border-red-400 hover:bg-red-50 transition-all duration-200"
+                        className="w-10 h-10 rounded-lg border-2 border-natalna-beige flex items-center justify-center text-natalna-primary hover:border-natalna-primary hover:bg-natalna-cream transition-all duration-200"
                       >
                         -
                       </button>
@@ -230,7 +236,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                       <button
                         type="button"
                         onClick={() => setPartySize(Math.min(20, partySize + 1))}
-                        className="w-10 h-10 rounded-lg border-2 border-red-300 flex items-center justify-center text-red-600 hover:border-red-400 hover:bg-red-50 transition-all duration-200"
+                        className="w-10 h-10 rounded-lg border-2 border-natalna-beige flex items-center justify-center text-natalna-primary hover:border-natalna-primary hover:bg-natalna-cream transition-all duration-200"
                       >
                         +
                       </button>
@@ -241,13 +247,15 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                   <div>
                     <label className="block text-sm font-medium text-black mb-2">Preferred Time *</label>
                     <input
-                      type="datetime-local"
+                      type="time"
                       value={dineInTime}
                       onChange={(e) => setDineInTime(e.target.value)}
-                      className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                      min="06:00"
+                      max="22:00"
+                      className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                       required
                     />
-                    <p className="text-xs text-gray-500 mt-1">Please select your preferred dining time</p>
+                    <p className="text-xs text-gray-500 mt-1">Operating hours: 6:00 AM - 10:00 PM</p>
                   </div>
                 </>
               )}
@@ -270,8 +278,8 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                           onClick={() => setPickupTime(option.value)}
                           className={`p-3 rounded-lg border-2 transition-all duration-200 text-sm ${
                             pickupTime === option.value
-                              ? 'border-red-600 bg-red-600 text-white'
-                              : 'border-red-300 bg-white text-gray-700 hover:border-red-400'
+                              ? 'border-natalna-primary bg-natalna-primary text-white shadow-md'
+                              : 'border-natalna-beige bg-white text-gray-700 hover:border-natalna-secondary'
                           }`}
                         >
                           <Clock className="h-4 w-4 mx-auto mb-1" />
@@ -285,7 +293,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                         type="text"
                         value={customTime}
                         onChange={(e) => setCustomTime(e.target.value)}
-                        className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                         placeholder="e.g., 45 minutes, 1 hour, 2:30 PM"
                         required
                       />
@@ -302,7 +310,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                     <textarea
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                       placeholder="Enter your complete delivery address"
                       rows={3}
                       required
@@ -315,7 +323,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                       type="text"
                       value={landmark}
                       onChange={(e) => setLandmark(e.target.value)}
-                      className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                       placeholder="e.g., Near McDonald's, Beside 7-Eleven, In front of school"
                     />
                   </div>
@@ -328,7 +336,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-4 py-3 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
                   placeholder="Any special requests or notes..."
                   rows={3}
                 />
@@ -337,14 +345,25 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
               <button
                 onClick={handleProceedToPayment}
                 disabled={!isDetailsValid}
-                className={`w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform ${
+                className={`w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform shadow-lg ${
                   isDetailsValid
-                    ? 'bg-red-600 text-white hover:bg-red-700 hover:scale-[1.02]'
+                    ? 'bg-gradient-to-r from-natalna-primary to-natalna-wood text-white hover:from-natalna-wood hover:to-natalna-wood hover:scale-[1.02]'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
                 Proceed to Payment
               </button>
+              
+              {!isDetailsValid && (
+                <p className="text-xs text-red-500 mt-2 text-center">
+                  {!customerName.trim() && 'Please enter your name. '}
+                  {!contactNumber.trim() && 'Please enter your contact number. '}
+                  {serviceType === 'delivery' && !address.trim() && 'Please enter your address. '}
+                  {serviceType === 'pickup' && pickupTime === 'custom' && !customTime.trim() && 'Please enter pickup time. '}
+                  {serviceType === 'dine-in' && !dineInTime.trim() && 'Please select your preferred time. '}
+                  {serviceType === 'dine-in' && partySize <= 0 && 'Please select party size. '}
+                </p>
+              )}
             </form>
           </div>
         </div>
@@ -363,13 +382,13 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
           <ArrowLeft className="h-5 w-5" />
           <span>Back to Details</span>
         </button>
-        <h1 className="text-3xl font-noto font-semibold text-black ml-8">Payment</h1>
+        <h1 className="text-3xl font-serif font-semibold text-natalna-dark ml-8">Payment</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Payment Method Selection */}
         <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-2xl font-noto font-medium text-black mb-6">Choose Payment Method</h2>
+          <h2 className="text-2xl font-serif font-medium text-natalna-dark mb-6">Choose Payment Method</h2>
           
           <div className="grid grid-cols-1 gap-4 mb-6">
             {paymentMethods.map((method) => (
@@ -379,8 +398,8 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                 onClick={() => setPaymentMethod(method.id as PaymentMethod)}
                 className={`p-4 rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 ${
                   paymentMethod === method.id
-                    ? 'border-red-600 bg-red-600 text-white'
-                    : 'border-red-300 bg-white text-gray-700 hover:border-red-400'
+                    ? 'border-natalna-primary bg-natalna-primary text-white shadow-md'
+                    : 'border-natalna-beige bg-white text-gray-700 hover:border-natalna-secondary'
                 }`}
               >
                 <span className="text-2xl">💳</span>
@@ -391,7 +410,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
 
           {/* Payment Details with QR Code */}
           {selectedPaymentMethod && (
-            <div className="bg-red-50 rounded-lg p-6 mb-6">
+            <div className="bg-natalna-cream rounded-lg p-6 mb-6 border border-natalna-beige">
               <h3 className="font-medium text-black mb-4">Payment Details</h3>
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex-1">
@@ -404,7 +423,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                   <img 
                     src={selectedPaymentMethod.qr_code_url} 
                     alt={`${selectedPaymentMethod.name} QR Code`}
-                    className="w-32 h-32 rounded-lg border-2 border-red-300 shadow-sm"
+                    className="w-32 h-32 rounded-lg border-2 border-natalna-gold shadow-md"
                     onError={(e) => {
                       e.currentTarget.src = 'https://images.pexels.com/photos/8867482/pexels-photo-8867482.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop';
                     }}
@@ -426,10 +445,10 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
 
         {/* Order Summary */}
         <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-2xl font-noto font-medium text-black mb-6">Final Order Summary</h2>
+          <h2 className="text-2xl font-serif font-medium text-natalna-dark mb-6">Final Order Summary</h2>
           
           <div className="space-y-4 mb-6">
-            <div className="bg-red-50 rounded-lg p-4">
+            <div className="bg-natalna-cream rounded-lg p-4 border border-natalna-beige">
               <h4 className="font-medium text-black mb-2">Customer Details</h4>
               <p className="text-sm text-gray-600">Name: {customerName}</p>
               <p className="text-sm text-gray-600">Contact: {contactNumber}</p>
@@ -451,14 +470,13 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
                     Party Size: {partySize} person{partySize !== 1 ? 's' : ''}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Preferred Time: {dineInTime ? new Date(dineInTime).toLocaleString('en-US', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric', 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    }) : 'Not selected'}
+                    Preferred Time: {dineInTime ? (() => {
+                      const [hour, minute] = dineInTime.split(':');
+                      const hourNum = parseInt(hour);
+                      const period = hourNum >= 12 ? 'PM' : 'AM';
+                      const hour12 = hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
+                      return `${hour12}:${minute} ${period}`;
+                    })() : 'Not selected'}
                   </p>
                 </>
               )}
@@ -496,7 +514,7 @@ Please confirm this order to proceed. Thank you for choosing ClickEats! 🥟
 
           <button
             onClick={handlePlaceOrder}
-            className="w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform bg-red-600 text-white hover:bg-red-700 hover:scale-[1.02]"
+            className="w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform bg-gradient-to-r from-natalna-primary to-natalna-wood text-white hover:from-natalna-wood hover:to-natalna-wood hover:scale-[1.02] shadow-lg"
           >
             Place Order via Messenger
           </button>

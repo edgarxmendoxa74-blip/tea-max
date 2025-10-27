@@ -106,11 +106,11 @@ const SiteSettingsManager: React.FC = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-noto font-semibold text-black">Site Settings</h2>
+        <h2 className="text-2xl font-serif font-semibold text-natalna-dark">Site Settings</h2>
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center space-x-2"
+            className="bg-gradient-to-r from-natalna-primary to-natalna-wood text-white px-4 py-2 rounded-lg hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 flex items-center space-x-2 shadow-md"
           >
             <Save className="h-4 w-4" />
             <span>Edit Settings</span>
@@ -127,7 +127,7 @@ const SiteSettingsManager: React.FC = () => {
             <button
               onClick={handleSave}
               disabled={uploading}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50"
+              className="bg-gradient-to-r from-natalna-primary to-natalna-wood text-white px-4 py-2 rounded-lg hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 shadow-md"
             >
               <Save className="h-4 w-4" />
               <span>{uploading ? 'Saving...' : 'Save Changes'}</span>
@@ -165,7 +165,7 @@ const SiteSettingsManager: React.FC = () => {
                 />
                 <label
                   htmlFor="logo-upload"
-                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
+                  className="bg-natalna-cream text-natalna-dark px-4 py-2 rounded-lg hover:bg-natalna-beige transition-colors duration-200 flex items-center space-x-2 cursor-pointer border border-natalna-beige"
                 >
                   <Upload className="h-4 w-4" />
                   <span>Upload Logo</span>
@@ -186,7 +186,7 @@ const SiteSettingsManager: React.FC = () => {
               name="site_name"
               value={formData.site_name}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-natalna-primary"
               placeholder="Enter site name"
             />
           ) : (
@@ -205,7 +205,7 @@ const SiteSettingsManager: React.FC = () => {
               value={formData.site_description}
               onChange={handleInputChange}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-natalna-primary"
               placeholder="Enter site description"
             />
           ) : (
@@ -225,7 +225,7 @@ const SiteSettingsManager: React.FC = () => {
                 name="currency"
                 value={formData.currency}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-natalna-primary"
                 placeholder="e.g., ₱, $, €"
               />
             ) : (
@@ -242,7 +242,7 @@ const SiteSettingsManager: React.FC = () => {
                 name="currency_code"
                 value={formData.currency_code}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-natalna-primary"
                 placeholder="e.g., PHP, USD, EUR"
               />
             ) : (

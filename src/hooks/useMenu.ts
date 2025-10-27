@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { MenuItem } from '../types';
 
@@ -7,7 +7,7 @@ export const useMenu = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchMenuItems = async () => {
+  const fetchMenuItems = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -73,7 +73,7 @@ export const useMenu = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const addMenuItem = async (item: Omit<MenuItem, 'id'>) => {
     try {

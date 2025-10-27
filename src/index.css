@@ -1,15 +1,60 @@
+/* Import elegant fonts - must be first */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Lato:wght@300;400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Ramen Yard Custom Styles */
-/* Minimal helpers for ramen palette when needed outside tailwind tokens */
-.bg-ramen-cream { background-color: #FFF3E0; }
-.bg-ramen-beige { background-color: #F7E7CE; }
-.text-ramen-red { color: #D7263D; }
-.text-ramen-dark { color: #0B0A0A; }
-.border-ramen-sesame { border-color: #D1C7B7; }
-.ring-ramen-gold { --tw-ring-color: #E0A106; }
+/* Natalna Restaurant Custom Styles - Green Aesthetic Theme */
+
+/* Performance Optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling with better performance */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU acceleration for common transforms */
+.transform,
+[class*="hover:scale"],
+[class*="group-hover:scale"] {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize images */
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: 300px 200px;
+}
+
+/* Minimal helpers for natalna palette when needed outside tailwind tokens */
+.bg-natalna-cream { background-color: #F1F8F5; }
+.bg-natalna-beige { background-color: #E8F5ED; }
+.bg-natalna-primary { background-color: #2D7A4F; }
+.text-natalna-primary { color: #2D7A4F; }
+.text-natalna-dark { color: #1B4332; }
+.text-natalna-secondary { color: #4A9D6F; }
+.border-natalna-beige { border-color: #E8F5ED; }
+.border-natalna-gold { border-color: #85C9A0; }
+.ring-natalna-gold { --tw-ring-color: #85C9A0; }
 
 /* Hide scrollbar for mobile nav */
 .scrollbar-hide {

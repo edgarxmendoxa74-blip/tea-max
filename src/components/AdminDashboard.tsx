@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, ArrowLeft, Coffee, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, ArrowLeft, Coffee, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings, Database } from 'lucide-react';
 import { MenuItem, Variation, AddOn } from '../types';
 import { addOnCategories } from '../data/menuData';
 import { useMenu } from '../hooks/useMenu';
@@ -8,6 +8,7 @@ import ImageUpload from './ImageUpload';
 import CategoryManager from './CategoryManager';
 import PaymentMethodManager from './PaymentMethodManager';
 import SiteSettingsManager from './SiteSettingsManager';
+import { initializeDatabase } from '../utils/initializeDatabase';
 
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -232,7 +233,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'ClickEats@Admin!2025') {
+    if (password === 'Natalnas@Admin!2025') {
       setIsAuthenticated(true);
       localStorage.setItem('beracah_admin_auth', 'true');
       setLoginError('');
@@ -246,6 +247,25 @@ const AdminDashboard: React.FC = () => {
     localStorage.removeItem('beracah_admin_auth');
     setPassword('');
     setCurrentView('dashboard');
+  };
+
+  const handleInitializeDatabase = async () => {
+    if (confirm('This will add sample menu items to your database. Continue?')) {
+      setIsProcessing(true);
+      try {
+        const result = await initializeDatabase();
+        if (result.success) {
+          alert('✅ ' + result.message + '\n\nPlease refresh the page to see the new items.');
+          window.location.reload();
+        } else {
+          alert('❌ Failed to initialize database: ' + result.message);
+        }
+      } catch (error) {
+        alert('❌ Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      } finally {
+        setIsProcessing(false);
+      }
+    }
   };
 
   // Login Screen
@@ -934,7 +954,7 @@ const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Coffee className="h-8 w-8 text-black" />
-              <h1 className="text-2xl font-noto font-semibold text-black">ClickEats Admin</h1>
+              <h1 className="text-2xl font-noto font-semibold text-black">Natalna's Admin</h1>
             </div>
             <div className="flex items-center space-x-4">
               <a
@@ -1046,6 +1066,16 @@ const AdminDashboard: React.FC = () => {
                 <Settings className="h-5 w-5 text-gray-400" />
                 <span className="font-medium text-gray-900">Site Settings</span>
               </button>
+              {totalItems === 0 && (
+                <button
+                  onClick={handleInitializeDatabase}
+                  disabled={isProcessing}
+                  className="w-full flex items-center space-x-3 p-3 text-left bg-gradient-to-r from-natalna-primary to-natalna-wood text-white rounded-lg hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 disabled:opacity-50"
+                >
+                  <Database className="h-5 w-5" />
+                  <span className="font-medium">{isProcessing ? 'Loading...' : 'Load Sample Menu Items'}</span>
+                </button>
+              )}
             </div>
           </div>
 

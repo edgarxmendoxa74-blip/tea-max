@@ -2,11 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useCart } from './hooks/useCart';
 import Header from './components/Header';
+import Hero from './components/Hero';
 import SubNav from './components/SubNav';
 import Menu from './components/Menu';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import FloatingCartButton from './components/FloatingCartButton';
+import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
 import { useMenu } from './hooks/useMenu';
 
@@ -30,7 +32,16 @@ function MainApp() {
     : menuItems.filter(item => item.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-cream-50 font-inter">
+    <div 
+      className="min-h-screen font-sans"
+      style={{
+        backgroundImage: `linear-gradient(rgba(241, 248, 245, 0.95), rgba(232, 245, 237, 0.97)), url('/hero-background.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <Header 
         cartItemsCount={cart.getTotalItems()}
         onCartClick={() => handleViewChange('cart')}
@@ -39,12 +50,15 @@ function MainApp() {
       <SubNav selectedCategory={selectedCategory} onCategoryClick={handleCategoryClick} />
       
       {currentView === 'menu' && (
-        <Menu 
-          menuItems={filteredMenuItems}
-          addToCart={cart.addToCart}
-          cartItems={cart.cartItems}
-          updateQuantity={cart.updateQuantity}
-        />
+        <>
+          <Hero />
+          <Menu 
+            menuItems={filteredMenuItems}
+            addToCart={cart.addToCart}
+            cartItems={cart.cartItems}
+            updateQuantity={cart.updateQuantity}
+          />
+        </>
       )}
       
       {currentView === 'cart' && (
@@ -68,10 +82,13 @@ function MainApp() {
       )}
       
       {currentView === 'menu' && (
-        <FloatingCartButton 
-          itemCount={cart.getTotalItems()}
-          onCartClick={() => handleViewChange('cart')}
-        />
+        <>
+          <FloatingCartButton 
+            itemCount={cart.getTotalItems()}
+            onCartClick={() => handleViewChange('cart')}
+          />
+          <Footer />
+        </>
       )}
     </div>
   );

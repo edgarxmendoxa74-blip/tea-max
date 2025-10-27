@@ -4,21 +4,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        ramen: {
-          red: '#D7263D',
-          dark: '#0B0A0A',
-          charcoal: '#111113',
-          cream: '#FFF3E0',
-          beige: '#F7E7CE',
-          gold: '#E0A106',
-          sesame: '#D1C7B7',
-          seaweed: '#1F2937',
-          kimchi: '#B81D24'
+        natalna: {
+          primary: '#2D7A4F',      // Forest green - main brand color
+          secondary: '#4A9D6F',    // Medium green - accent
+          accent: '#6BBF8F',       // Mint green - highlights
+          dark: '#1B4332',         // Deep forest - text
+          cream: '#F1F8F5',        // Mint cream - background
+          beige: '#E8F5ED',        // Soft mint - cards
+          gold: '#85C9A0',         // Light sage - premium touches
+          sage: '#52B788',         // Fresh sage - natural accent
+          terracotta: '#74C69D',   // Seafoam green
+          wood: '#1E5C3A'          // Rich emerald tone
         }
       },
       fontFamily: {
-        'pretendard': ['Pretendard', 'system-ui', 'sans-serif'],
-        'noto-kr': ['Noto Serif KR', 'serif']
+        'serif': ['Playfair Display', 'Georgia', 'serif'],
+        'sans': ['Lato', 'Inter', 'system-ui', 'sans-serif']
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

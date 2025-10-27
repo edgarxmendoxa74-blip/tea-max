@@ -5,13 +5,13 @@ export const useImageUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const uploadImage = async (file: File): Promise<string> => {
+  const uploadImage = async (file: File, folder?: string): Promise<string> => {
     try {
       setUploading(true);
       setUploadProgress(0);
 
       // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         throw new Error('Please upload a valid image file (JPEG, PNG, WebP, or GIF)');
       }
@@ -22,9 +22,11 @@ export const useImageUpload = () => {
         throw new Error('Image size must be less than 5MB');
       }
 
-      // Generate unique filename
+      // Generate unique filename with optional folder
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const timestamp = Date.now();
+      const random = Math.random().toString(36).substring(2);
+      const fileName = folder ? `${folder}/${timestamp}-${random}.${fileExt}` : `${timestamp}-${random}.${fileExt}`;
 
       // Simulate upload progress
       const progressInterval = setInterval(() => {
