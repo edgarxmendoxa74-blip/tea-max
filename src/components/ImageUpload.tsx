@@ -73,7 +73,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           <button
             type="button"
             onClick={handleRemoveImage}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+            className="absolute top-2 right-2 p-1 bg-red-100 text-red-500 border border-red-500 rounded-full hover:bg-red-600 transition-colors duration-200"
             disabled={uploading}
           >
             <X className="h-4 w-4" />
@@ -120,7 +120,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             type="button"
             onClick={triggerFileSelect}
             disabled={uploading}
-            className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center space-x-2 px-4 py-2 bg-white text-black border-2 border-black rounded-lg hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Upload className="h-4 w-4" />
             <span>Upload Image</span>

@@ -110,19 +110,19 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {item.isOnDiscount && item.discountPrice && (
-              <div className="bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
+              <div className="bg-red-100 text-red-600 border border-red-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
                 SALE
               </div>
             )}
             {item.popular && (
-              <div className="bg-teamax-accent text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
+              <div className="bg-white text-black border-2 border-teamax-accent text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
                 ⭐ POPULAR
               </div>
             )}
           </div>
 
           {!item.available && (
-            <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-3 right-3 bg-red-100 text-red-500 border border-red-500 text-[10px] font-bold px-3 py-1 rounded-full">
               UNAVAILABLE
             </div>
           )}
@@ -131,7 +131,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         {/* Content */}
         <div className="p-5">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-lg font-serif font-bold text-white leading-tight flex-1 pr-2">{item.name}</h4>
+            <h4 className="text-lg font-serif font-bold text-black leading-tight flex-1 pr-2">{item.name}</h4>
             {item.variations && item.variations.length > 0 && (
               <div className="text-[10px] text-teamax-secondary border border-teamax-border px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">
                 {item.variations.length} sizes
@@ -156,7 +156,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                   </span>
                 </div>
               ) : (
-                <div className="text-xl font-bold text-white">
+                <div className="text-xl font-bold text-black">
                   ₱{item.basePrice.toFixed(2)}
                 </div>
               )}
@@ -174,7 +174,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
               ) : quantity === 0 ? (
                 <button
                   onClick={handleAddToCart}
-                  className="bg-black text-white px-6 py-2.5 rounded-xl hover:bg-black/90 transition-all duration-200 transform hover:scale-105 font-bold text-xs uppercase tracking-widest shadow-lg shadow-black/20"
+                  className="bg-white text-black border-2 border-black px-6 py-2.5 rounded-xl hover:bg-black/90 transition-all duration-200 transform hover:scale-105 font-bold text-xs uppercase tracking-widest shadow-lg shadow-black/20"
                 >
                   {item.variations?.length || item.addOns?.length ? 'Customize' : 'Add to Cart'}
                 </button>
@@ -182,14 +182,14 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                 <div className="flex items-center space-x-3 bg-teamax-dark rounded-xl p-1 border border-teamax-border">
                   <button
                     onClick={handleDecrement}
-                    className="p-2 hover:bg-teamax-light rounded-lg transition-colors text-white"
+                    className="p-2 hover:bg-teamax-light rounded-lg transition-colors text-black"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="font-bold text-white min-w-[20px] text-center">{quantity}</span>
+                  <span className="font-bold text-black min-w-[20px] text-center">{quantity}</span>
                   <button
                     onClick={handleIncrement}
-                    className="p-2 hover:bg-teamax-light rounded-lg transition-colors text-white"
+                    className="p-2 hover:bg-teamax-light rounded-lg transition-colors text-black"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
@@ -206,7 +206,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           <div className="bg-teamax-surface rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl border border-teamax-border">
             <div className="p-6 border-b border-teamax-border flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-serif font-bold text-white">Customize {item.name}</h3>
+                <h3 className="text-xl font-serif font-bold text-black">Customize {item.name}</h3>
                 <p className="text-sm text-teamax-secondary mt-0.5 font-sans">Choose your preferences</p>
               </div>
               <button
@@ -240,7 +240,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                             onChange={() => setSelectedVariation(variation)}
                             className="w-4 h-4 accent-teamax-accent"
                           />
-                          <span className="font-medium text-white">{variation.name}</span>
+                          <span className="font-medium text-black">{variation.name}</span>
                         </div>
                         <span className="text-teamax-accent font-bold">
                           +₱{variation.price.toFixed(2)}
@@ -270,7 +270,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                                 }`}
                             >
                               <div className="flex-1">
-                                <span className="font-medium text-white text-sm">{addOn.name}</span>
+                                <span className="font-medium text-black text-sm">{addOn.name}</span>
                                 {addOn.price > 0 && (
                                   <div className="text-xs text-teamax-accent font-bold">
                                     +₱{addOn.price.toFixed(2)}
@@ -284,17 +284,17 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                                     <button
                                       type="button"
                                       onClick={() => updateAddOnQuantity(addOn, existing.quantity - 1)}
-                                      className="p-1 hover:bg-teamax-light rounded-lg text-white"
+                                      className="p-1 hover:bg-teamax-light rounded-lg text-black"
                                     >
                                       <Minus className="h-3.5 w-3.5" />
                                     </button>
-                                    <span className="font-bold text-white text-xs min-w-[16px] text-center">
+                                    <span className="font-bold text-black text-xs min-w-[16px] text-center">
                                       {existing.quantity}
                                     </span>
                                     <button
                                       type="button"
                                       onClick={() => updateAddOnQuantity(addOn, existing.quantity + 1)}
-                                      className="p-1 hover:bg-teamax-light rounded-lg text-white"
+                                      className="p-1 hover:bg-teamax-light rounded-lg text-black"
                                     >
                                       <Plus className="h-3.5 w-3.5" />
                                     </button>
@@ -322,7 +322,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
             <div className="p-6 border-t border-teamax-border bg-teamax-dark/50">
               <button
                 onClick={handleCustomizedAddToCart}
-                className="w-full bg-black text-white py-4 rounded-2xl hover:bg-black/90 transition-all font-bold flex items-center justify-center space-x-3 shadow-xl transform hover:scale-[1.02] shadow-black/20"
+                className="w-full bg-white text-black border-2 border-black py-4 rounded-2xl hover:bg-black/90 transition-all font-bold flex items-center justify-center space-x-3 shadow-xl transform hover:scale-[1.02] shadow-black/20"
               >
                 <ShoppingCart className="h-5 w-5" />
                 <span className="uppercase tracking-widest text-sm">Add to Cart • ₱{calculatePrice().toFixed(2)}</span>

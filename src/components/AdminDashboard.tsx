@@ -662,7 +662,7 @@ const AdminDashboard: React.FC = () => {
                   <button
                     onClick={handleBulkRemove}
                     disabled={isProcessing}
-                    className="flex items-center space-x-2 bg-red-600 text-black px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="flex items-center space-x-2 bg-red-100 text-red-600 border border-red-600 px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>{isProcessing ? 'Removing...' : 'Remove Selected'}</span>
@@ -777,7 +777,7 @@ const AdminDashboard: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex flex-col space-y-1">
                           {item.popular && (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-black">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600 border border-red-600">
                               Popular
                             </span>
                           )}
@@ -885,7 +885,7 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center space-x-2">
                       {item.popular && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-black">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600 border border-red-600">
                           Popular
                         </span>
                       )}
@@ -1038,7 +1038,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={handleAddItem}
                 className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">
                   <Plus className="h-5 w-5" />
                 </div>
                 <div>
@@ -1051,7 +1051,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => setCurrentView('items')}
                 className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">
                   <Package className="h-5 w-5" />
                 </div>
                 <div>
@@ -1064,7 +1064,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => setCurrentView('categories')}
                 className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">
                   <FolderOpen className="h-5 w-5" />
                 </div>
                 <div>
@@ -1077,7 +1077,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => setCurrentView('payments')}
                 className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">
                   <CreditCard className="h-5 w-5" />
                 </div>
                 <div>
@@ -1090,7 +1090,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => setCurrentView('settings')}
                 className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300 sm:col-span-2"
               >
-                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">
                   <Settings className="h-5 w-5" />
                 </div>
                 <div>

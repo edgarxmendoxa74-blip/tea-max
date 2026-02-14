@@ -5,15 +5,15 @@ export default {
     extend: {
       colors: {
         teamax: {
-          primary: '#1e293b',      // Blueprint Dark (Slate 800)
-          secondary: '#64748b',    // Blueprint Gray Soft (Slate 500)
-          accent: '#1e40af',       // Blueprint Blue (Blue 800)
-          dark: '#fefefe',         // Blueprint Off-White (Main Background)
-          surface: '#f8fafc',      // Blueprint Cream (Light Cards/Header)
-          border: '#cbd5e1',       // Blueprint Border (Slate 300)
-          light: '#e2e8f0',        // Lighter elements (Slate 200)
-          gold: '#3b82f6',         // Secondary Accent (Blue 500)
-          warm: '#f1f5f9'          // Secondary Background (Slate 100)
+          primary: '#000000',      // Pure Black
+          secondary: '#334155',    // Darker Gray (Slate 700)
+          accent: '#000000',       // Black Accent
+          dark: '#ffffff',         // Pure White (Main Background)
+          surface: '#f8fafc',      // Off-White (Cards)
+          border: '#e2e8f0',       // Light Border (Slate 200)
+          light: '#f1f5f9',        // Lighter gray (Slate 100)
+          gold: '#000000',         // Secondary Accent
+          warm: '#ffffff'          // Backup White
         }
       },
       fontFamily: {

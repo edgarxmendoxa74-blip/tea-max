@@ -210,7 +210,7 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
                       type="button"
                       onClick={() => setServiceType(option.value as ServiceType)}
                       className={`p-4 rounded-lg border-2 transition-all duration-200 ${serviceType === option.value
-                        ? 'border-natalna-primary bg-natalna-primary text-white shadow-md'
+                        ? 'border-natalna-primary bg-natalna-primary text-black shadow-md'
                         : 'border-natalna-beige bg-white text-gray-700 hover:border-natalna-secondary'
                         }`}
                     >
@@ -279,7 +279,7 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
                           type="button"
                           onClick={() => setPickupTime(option.value)}
                           className={`p-3 rounded-lg border-2 transition-all duration-200 text-sm ${pickupTime === option.value
-                            ? 'border-natalna-primary bg-natalna-primary text-white shadow-md'
+                            ? 'border-natalna-primary bg-natalna-primary text-black shadow-md'
                             : 'border-natalna-beige bg-white text-gray-700 hover:border-natalna-secondary'
                             }`}
                         >
@@ -347,7 +347,7 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
                 onClick={handleProceedToPayment}
                 disabled={!isDetailsValid}
                 className={`w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform shadow-lg ${isDetailsValid
-                  ? 'bg-gradient-to-r from-natalna-primary to-natalna-wood text-white hover:from-natalna-wood hover:to-natalna-wood hover:scale-[1.02]'
+                  ? 'bg-gradient-to-r from-natalna-primary to-natalna-wood text-black hover:from-natalna-wood hover:to-natalna-wood hover:scale-[1.02]'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
               >
@@ -397,7 +397,7 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
                 type="button"
                 onClick={() => setPaymentMethod(method.id as PaymentMethod)}
                 className={`p-4 rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 ${paymentMethod === method.id
-                  ? 'border-natalna-primary bg-natalna-primary text-white shadow-md'
+                  ? 'border-natalna-primary bg-natalna-primary text-black shadow-md'
                   : 'border-natalna-beige bg-white text-gray-700 hover:border-natalna-secondary'
                   }`}
               >
@@ -513,7 +513,7 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
 
           <button
             onClick={handlePlaceOrder}
-            className="w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform bg-gradient-to-r from-natalna-primary to-natalna-wood text-white hover:from-natalna-wood hover:to-natalna-wood hover:scale-[1.02] shadow-lg"
+            className="w-full py-4 rounded-xl font-medium text-lg transition-all duration-200 transform bg-gradient-to-r from-natalna-primary to-natalna-wood text-black hover:from-natalna-wood hover:to-natalna-wood hover:scale-[1.02] shadow-lg"
           >
             Place Order via Messenger
           </button>

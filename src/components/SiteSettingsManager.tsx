@@ -214,7 +214,7 @@ const SiteSettingsManager: React.FC = () => {
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all duration-200 flex items-center space-x-2 shadow-md"
+            className="bg-white text-black border-2 border-black px-4 py-2 rounded-lg hover:bg-gray-800 transition-all duration-200 flex items-center space-x-2 shadow-md"
           >
             <Edit className="h-4 w-4" />
             <span>Edit Settings</span>
@@ -223,7 +223,7 @@ const SiteSettingsManager: React.FC = () => {
           <div className="flex space-x-2">
             <button
               onClick={handleCancel}
-              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 flex items-center space-x-2"
+              className="bg-gray-500 text-black px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 flex items-center space-x-2"
             >
               <X className="h-4 w-4" />
               <span>Cancel</span>
@@ -231,7 +231,7 @@ const SiteSettingsManager: React.FC = () => {
             <button
               onClick={handleSave}
               disabled={uploading}
-              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 shadow-md"
+              className="bg-white text-black border-2 border-black px-4 py-2 rounded-lg hover:bg-gray-800 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 shadow-md"
             >
               <Save className="h-4 w-4" />
               <span>{uploading ? 'Saving...' : 'Save Changes'}</span>
@@ -269,7 +269,7 @@ const SiteSettingsManager: React.FC = () => {
                 />
                 <label
                   htmlFor="logo-upload"
-                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200 flex items-center space-x-2 cursor-pointer border border-black shadow-sm"
+                  className="bg-white text-black border-2 border-black px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200 flex items-center space-x-2 cursor-pointer border border-black shadow-sm"
                 >
                   <Upload className="h-4 w-4" />
                   <span>Upload Logo</span>
@@ -343,7 +343,7 @@ const SiteSettingsManager: React.FC = () => {
             {isEditing && (
               <button
                 onClick={handleAddSlide}
-                className="flex items-center gap-2 text-sm bg-black text-white px-3 py-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+                className="flex items-center gap-2 text-sm bg-white text-black border-2 border-black px-3 py-1.5 rounded-lg hover:bg-gray-800 transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Add Slide

@@ -107,14 +107,14 @@ const Hero: React.FC = () => {
           <div className="absolute inset-0 z-30 flex items-center justify-between px-4 pointer-events-none">
             <button
               onClick={prevSlide}
-              className="p-3 rounded-full bg-black/20 hover:bg-teamax-accent backdrop-blur-md transition-all text-white border border-white/10 pointer-events-auto group"
+              className="p-3 rounded-full bg-black/20 hover:bg-teamax-accent backdrop-blur-md transition-all text-black border border-white/10 pointer-events-auto group"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
             </button>
             <button
               onClick={nextSlide}
-              className="p-3 rounded-full bg-black/20 hover:bg-teamax-accent backdrop-blur-md transition-all text-white border border-white/10 pointer-events-auto group"
+              className="p-3 rounded-full bg-black/20 hover:bg-teamax-accent backdrop-blur-md transition-all text-black border border-white/10 pointer-events-auto group"
               aria-label="Next slide"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />

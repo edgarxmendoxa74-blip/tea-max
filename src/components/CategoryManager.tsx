@@ -129,7 +129,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                 </button>
                 <button
                   onClick={handleSaveCategory}
-                  className="px-4 py-2 bg-green-600 text-black rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
+                  className="px-4 py-2 bg-green-100 text-green-600 border border-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
                 >
                   <Save className="h-4 w-4" />
                   <span>Save</span>
@@ -231,7 +231,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
-                className="flex items-center space-x-2 bg-green-600 text-black px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                className="flex items-center space-x-2 bg-green-100 text-green-600 border border-green-600 px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
               >
                 <ArrowLeft className="h-5 w-5" />
                 <span>Dashboard</span>
@@ -240,7 +240,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
             </div>
             <button
               onClick={handleAddCategory}
-              className="flex items-center space-x-2 bg-black text-black px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+              className="flex items-center space-x-2 bg-white text-black border-2 border-black px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200"
             >
               <Plus className="h-4 w-4" />
               <span>Add Category</span>
@@ -259,7 +259,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                 <p className="text-black mb-4">No categories found</p>
                 <button
                   onClick={handleAddCategory}
-                  className="bg-green-600 text-black px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                  className="bg-green-100 text-green-600 border border-green-600 px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                   Add First Category
                 </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { MenuItem, CartItem } from '../types';
 import { useCategories } from '../hooks/useCategories';
 import MenuItemCard from './MenuItemCard';
@@ -83,35 +83,49 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
           <h2 className="text-4xl font-serif font-bold text-teamax-primary mb-4">Our Menu</h2>
         </div>
 
-        {categories.map((category) => {
-          const categoryItems = menuItems.filter(item => item.category === category.id);
+        <div className="space-y-24">
+          {categories.map((category) => {
+            const categoryItems = useMemo(() =>
+              menuItems.filter(item => item.category === category.id),
+              [menuItems, category.id]
+            );
 
-          if (categoryItems.length === 0) return null;
+            if (categoryItems.length === 0) return null;
 
-          return (
-            <section key={category.id} id={category.id} className="mb-16">
-              <div className="flex items-center mb-8">
-                <span className="text-3xl mr-3">{category.icon}</span>
-                <h3 className="text-3xl font-serif font-semibold text-teamax-primary">{category.name}</h3>
-              </div>
+            return (
+              <section
+                key={category.id}
+                id={category.id}
+                className="scroll-mt-32 transition-all duration-500"
+              >
+                <div className="flex items-center mb-10 border-b border-teamax-border/10 pb-4">
+                  <span className="text-4xl mr-4 drop-shadow-sm">{category.icon}</span>
+                  <h3 className="text-3xl font-serif font-bold text-black tracking-tight">{category.name}</h3>
+                </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categoryItems.map((item) => {
-                  const cartItem = cartItems.find(cartItem => cartItem.id === item.id);
-                  return (
-                    <MenuItemCard
-                      key={item.id}
-                      item={item}
-                      onAddToCart={addToCart}
-                      quantity={cartItem?.quantity || 0}
-                      onUpdateQuantity={updateQuantity}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {categoryItems.map((item, index) => {
+                    const cartItem = cartItems.find(cartItem => cartItem.id === item.id);
+                    return (
+                      <div
+                        key={item.id}
+                        className="animate-scale-in"
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <MenuItemCard
+                          item={item}
+                          onAddToCart={addToCart}
+                          quantity={cartItem?.quantity || 0}
+                          onUpdateQuantity={updateQuantity}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
       </main>
     </>
   );

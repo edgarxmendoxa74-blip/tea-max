@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setShowHowToOrder(true)}
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-black/90 rounded-full transition-all duration-300 font-bold text-xs uppercase tracking-widest border border-black hover:scale-105 active:scale-95 shadow-lg shadow-black/20"
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-white text-black border-2 border-black hover:bg-black/90 rounded-full transition-all duration-300 font-bold text-xs uppercase tracking-widest border border-black hover:scale-105 active:scale-95 shadow-lg shadow-black/20"
               >
                 <HelpCircle className="h-4 w-4" />
                 <span>How to Order</span>
@@ -55,12 +55,12 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               <button
                 onClick={onCartClick}
-                className="relative p-3 bg-black text-white hover:bg-black/90 border border-black rounded-full transition-all duration-300 group hover:scale-110 active:scale-90 shadow-lg"
+                className="relative p-3 bg-white text-black border-2 border-black hover:bg-black/90 border border-black rounded-full transition-all duration-300 group hover:scale-110 active:scale-90 shadow-lg"
                 title="Cart"
               >
                 <ShoppingCart className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
                 {cartItemsCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center animate-bounce-gentle border-2 border-teamax-surface shadow-lg">
+                  <span className="absolute -top-2 -right-2 bg-red-100 text-red-600 border border-red-600 text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center animate-bounce-gentle border-2 border-teamax-surface shadow-lg">
                     {cartItemsCount}
                   </span>
                 )}
@@ -88,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
             <div className="p-8 space-y-8">
               {/* Step 1 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teamax-accent/20 rotate-3 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-teamax-accent/20 rotate-3 group-hover:rotate-0 transition-transform">
                   1
                 </div>
                 <div>
@@ -101,7 +101,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               {/* Step 2 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teamax-accent/20 -rotate-3 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-teamax-accent/20 -rotate-3 group-hover:rotate-0 transition-transform">
                   2
                 </div>
                 <div>
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               {/* Step 3 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teamax-accent/20 rotate-1 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-teamax-accent/20 rotate-1 group-hover:rotate-0 transition-transform">
                   3
                 </div>
                 <div>
@@ -127,7 +127,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               {/* Step 4 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teamax-accent/20 -rotate-2 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-teamax-accent/20 -rotate-2 group-hover:rotate-0 transition-transform">
                   4
                 </div>
                 <div>
@@ -154,7 +154,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               {/* Step 5 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teamax-accent/20 rotate-2 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-teamax-accent/20 rotate-2 group-hover:rotate-0 transition-transform">
                   5
                 </div>
                 <div>
@@ -167,7 +167,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               {/* Step 6 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teamax-accent/20 -rotate-1 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-teamax-accent rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-teamax-accent/20 -rotate-1 group-hover:rotate-0 transition-transform">
                   6
                 </div>
                 <div>
@@ -180,7 +180,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
 
               {/* Step 7 */}
               <div className="flex gap-6 group hover:translate-x-1 transition-transform">
-                <div className="flex-shrink-0 w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-green-600/20 rotate-3 group-hover:rotate-0 transition-transform">
+                <div className="flex-shrink-0 w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-green-600/20 rotate-3 group-hover:rotate-0 transition-transform">
                   7
                 </div>
                 <div>
@@ -216,7 +216,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick }) => {
               {/* Close Button */}
               <button
                 onClick={() => setShowHowToOrder(false)}
-                className="w-full py-5 bg-teamax-accent text-white rounded-2xl hover:brightness-110 transition-all duration-300 font-bold uppercase tracking-widest text-sm shadow-xl shadow-teamax-accent/20 transform hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full py-5 bg-white text-black border-2 border-teamax-accent rounded-2xl hover:brightness-110 transition-all duration-300 font-bold uppercase tracking-widest text-sm shadow-xl shadow-teamax-accent/20 transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 Got it, thanks!
               </button>

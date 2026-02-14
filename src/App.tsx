@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useCart } from './hooks/useCart';
+import { useMenu } from './hooks/useMenu';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import SubNav from './components/SubNav';
@@ -9,7 +10,6 @@ import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import FloatingCartButton from './components/FloatingCartButton';
 import AdminDashboard from './components/AdminDashboard';
-import { useMenu } from './hooks/useMenu';
 
 function MainApp() {
   const cart = useCart();
@@ -25,15 +25,19 @@ function MainApp() {
     setSelectedCategory(categoryId);
   };
 
-  // Filter menu items based on selected category
-  const filteredMenuItems = selectedCategory === 'all'
-    ? menuItems
-    : menuItems.filter(item => item.category === selectedCategory);
+  // Memoize values to prevent unnecessary re-renders
+  const totalItemsCount = useMemo(() => cart.getTotalItems(), [cart.cartItems]);
+
+  const filteredMenuItems = useMemo(() => {
+    return selectedCategory === 'all'
+      ? menuItems
+      : menuItems.filter(item => item.category === selectedCategory);
+  }, [selectedCategory, menuItems]);
 
   return (
     <div className="min-h-screen font-sans app-bg">
       <Header
-        cartItemsCount={cart.getTotalItems()}
+        cartItemsCount={totalItemsCount}
         onCartClick={() => handleViewChange('cart')}
       />
       <SubNav selectedCategory={selectedCategory} onCategoryClick={handleCategoryClick} />
@@ -73,7 +77,7 @@ function MainApp() {
       {currentView === 'menu' && (
         <>
           <FloatingCartButton
-            itemCount={cart.getTotalItems()}
+            itemCount={totalItemsCount}
             onCartClick={() => handleViewChange('cart')}
           />
         </>

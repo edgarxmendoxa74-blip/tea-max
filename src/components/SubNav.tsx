@@ -24,8 +24,8 @@ const SubNav: React.FC<SubNavProps> = ({ selectedCategory, onCategoryClick }) =>
               <button
                 onClick={() => onCategoryClick('all')}
                 className={`px-5 py-2 rounded-full text-xs transition-all duration-300 border uppercase tracking-widest font-bold ${selectedCategory === 'all'
-                  ? 'bg-black text-white border-black shadow-lg shadow-black/20 scale-105'
-                  : 'bg-teamax-dark text-teamax-secondary border-teamax-border hover:bg-black hover:text-white hover:border-black'
+                  ? 'bg-white text-black border-2 border-black border-black shadow-lg shadow-black/20 scale-105'
+                  : 'bg-teamax-dark text-teamax-secondary border-teamax-border hover:bg-black hover:text-black hover:border-black'
                   }`}
               >
                 All
@@ -35,8 +35,8 @@ const SubNav: React.FC<SubNavProps> = ({ selectedCategory, onCategoryClick }) =>
                   key={c.id}
                   onClick={() => onCategoryClick(c.id)}
                   className={`px-5 py-2 rounded-full text-xs transition-all duration-300 border flex items-center space-x-2 uppercase tracking-widest font-bold ${selectedCategory === c.id
-                    ? 'bg-black text-white border-black shadow-lg shadow-black/20 scale-105'
-                    : 'bg-teamax-dark text-teamax-secondary border-teamax-border hover:bg-black hover:text-white hover:border-black'
+                    ? 'bg-white text-black border-2 border-black border-black shadow-lg shadow-black/20 scale-105'
+                    : 'bg-teamax-dark text-teamax-secondary border-teamax-border hover:bg-black hover:text-black hover:border-black'
                     }`}
                 >
                   <span className="text-base">{c.icon}</span>
@@ -51,6 +51,6 @@ const SubNav: React.FC<SubNavProps> = ({ selectedCategory, onCategoryClick }) =>
   );
 };
 
-export default SubNav;
+export default React.memo(SubNav);
 
 
