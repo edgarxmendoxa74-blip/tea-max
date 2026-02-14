@@ -121,7 +121,7 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
               <div className="flex items-center space-x-4">
                 <button
                   onClick={handleCancel}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+                  className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
                 >
                   <ArrowLeft className="h-5 w-5" />
                   <span>Back</span>
@@ -140,7 +140,7 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
                 </button>
                 <button
                   onClick={handleSaveMethod}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
+                  className="px-4 py-2 bg-green-600 text-black rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
                 >
                   <Save className="h-4 w-4" />
                   <span>Save</span>
@@ -174,8 +174,8 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
                   placeholder="kebab-case-id"
                   disabled={currentView === 'edit'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  {currentView === 'edit' 
+                <p className="text-xs text-black mt-1">
+                  {currentView === 'edit'
                     ? 'Method ID cannot be changed after creation'
                     : 'Use kebab-case format (e.g., "gcash", "bank-transfer")'
                   }
@@ -220,7 +220,7 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="0"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-black mt-1">
                   Lower numbers appear first in the checkout
                 </p>
               </div>
@@ -252,7 +252,7 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
-                className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+                className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
               >
                 <ArrowLeft className="h-5 w-5" />
                 <span>Dashboard</span>
@@ -261,7 +261,7 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
             </div>
             <button
               onClick={handleAddMethod}
-              className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+              className="flex items-center space-x-2 bg-green-600 text-black px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
             >
               <Plus className="h-4 w-4" />
               <span>Add Payment Method</span>
@@ -274,14 +274,14 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="p-6">
             <h2 className="text-lg font-playfair font-medium text-black mb-4">Payment Methods</h2>
-            
+
             {paymentMethods.length === 0 ? (
               <div className="text-center py-8">
                 <CreditCard className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 mb-4">No payment methods found</p>
+                <p className="text-black mb-4">No payment methods found</p>
                 <button
                   onClick={handleAddMethod}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                  className="bg-green-600 text-black px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                   Add First Payment Method
                 </button>
@@ -306,31 +306,34 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
                       </div>
                       <div>
                         <h3 className="font-medium text-black">{method.name}</h3>
-                        <p className="text-sm text-gray-600">{method.account_number}</p>
-                        <p className="text-sm text-gray-500">Account: {method.account_name}</p>
+                        <p className="text-sm text-black">{method.account_number}</p>
+                        <p className="text-sm text-black">Account: {method.account_name}</p>
                         <p className="text-xs text-gray-400">ID: {method.id} • Order: #{method.sort_order}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        method.active 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${method.active
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                        }`}>
                         {method.active ? 'Active' : 'Inactive'}
                       </span>
-                      
+
                       <button
                         onClick={() => handleEditMethod(method)}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors duration-200"
+                        className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded transition-colors duration-200"
+                        title="Edit Payment Method"
+                        aria-label="Edit Payment Method"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
-                      
+
                       <button
                         onClick={() => handleDeleteMethod(method.id)}
                         className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors duration-200"
+                        title="Delete Payment Method"
+                        aria-label="Delete Payment Method"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

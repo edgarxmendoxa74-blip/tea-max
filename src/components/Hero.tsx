@@ -1,298 +1,140 @@
-import React, { memo, useState } from 'react';
-import { X, Calendar, Clock, Users, User, Phone, MessageSquare } from 'lucide-react';
+import React, { memo, useState, useEffect } from 'react';
+import { Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSiteSettings } from '../hooks/useSiteSettings';
+
+const DEFAULT_HERO_IMAGES = [
+  {
+    url: 'https://images.unsplash.com/photo-1544787210-22dbdc1763f6?q=80&w=2070&auto=format&fit=crop',
+    title: 'Pure Milk Tea &',
+    subtitle: 'Finest Coffee',
+    description: 'Simple ingredients, exceptional taste. Discover our curated selection of handcrafted beverages at Tea Max Milk Tea Hub.'
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1594631252845-29fc45865157?q=80&w=2070&auto=format&fit=crop',
+    title: 'Experience The',
+    subtitle: 'Perfect Brew',
+    description: 'Our coffee is roasted to perfection, bringing out the rich and bold flavors in every cup.'
+  }
+];
 
 const Hero: React.FC = () => {
-  const [showBookingForm, setShowBookingForm] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState({
-    name: '',
-    contact: '',
-    date: '',
-    time: '',
-    partySize: 2,
-    specialRequests: ''
-  });
+  const { siteSettings } = useSiteSettings();
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handleBookNow = () => {
-    setShowBookingForm(true);
+  const heroImages = siteSettings?.hero_slides && siteSettings.hero_slides.length > 0
+    ? siteSettings.hero_slides
+    : siteSettings
+      ? [
+        {
+          url: siteSettings.hero_image || DEFAULT_HERO_IMAGES[0].url,
+          title: siteSettings.hero_title || DEFAULT_HERO_IMAGES[0].title,
+          subtitle: siteSettings.hero_subtitle || DEFAULT_HERO_IMAGES[0].subtitle,
+          description: siteSettings.hero_description || DEFAULT_HERO_IMAGES[0].description
+        },
+        ...DEFAULT_HERO_IMAGES.slice(1)
+      ]
+      : DEFAULT_HERO_IMAGES;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroImages.length);
   };
 
-  const handleSubmitBooking = () => {
-    // Validate required fields
-    if (!bookingDetails.name.trim() || !bookingDetails.contact.trim() || 
-        !bookingDetails.date || !bookingDetails.time) {
-      alert('Please fill in all required fields (Name, Contact, Date, and Time)');
-      return;
-    }
-
-    // Format time to 12-hour format
-    const formatTime = (timeString: string) => {
-      const [hour, minute] = timeString.split(':');
-      const hourNum = parseInt(hour);
-      const period = hourNum >= 12 ? 'PM' : 'AM';
-      const hour12 = hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
-      return `${hour12}:${minute} ${period}`;
-    };
-
-    // Format date
-    const formatDate = (dateString: string) => {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
-    };
-
-    // Create receipt-style message
-    const bookingReceipt = `
-🏪 NATALNA'S RESTAURANT
-━━━━━━━━━━━━━━━━━━━━━━
-📋 RESERVATION DETAILS
-━━━━━━━━━━━━━━━━━━━━━━
-
-👤 Guest Name: ${bookingDetails.name}
-📞 Contact: ${bookingDetails.contact}
-📅 Date: ${formatDate(bookingDetails.date)}
-🕐 Time: ${formatTime(bookingDetails.time)}
-👥 Party Size: ${bookingDetails.partySize} ${bookingDetails.partySize === 1 ? 'person' : 'people'}
-
-${bookingDetails.specialRequests ? `📝 Special Requests:\n${bookingDetails.specialRequests}\n` : ''}
-━━━━━━━━━━━━━━━━━━━━━━
-
-Please confirm this reservation. Thank you for choosing Natalna's Restaurant! 🍽️
-
-Operating Hours: 6:00 AM - 10:00 PM Daily
-    `.trim();
-
-    const encodedMessage = encodeURIComponent(bookingReceipt);
-    const messengerUrl = `https://m.me/Natalnaph?text=${encodedMessage}`;
-    
-    window.open(messengerUrl, '_blank');
-    
-    // Close modal and reset form
-    setShowBookingForm(false);
-    setBookingDetails({
-      name: '',
-      contact: '',
-      date: '',
-      time: '',
-      partySize: 2,
-      specialRequests: ''
-    });
-  };
-
-  const getTodayDate = () => {
-    return new Date().toISOString().split('T')[0];
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length);
   };
 
   return (
     <>
-    <section 
-      className="relative py-24 px-4 bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: `linear-gradient(rgba(27, 67, 50, 0.75), rgba(45, 122, 79, 0.65)), url('/hero-background.jpg')`
-      }}
-    >
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-6 animate-fade-in drop-shadow-2xl">
-          Authentic Homemade Cuisine
-          <span className="block text-natalna-gold mt-3 text-4xl md:text-5xl">at Natalna's Restaurant</span>
-        </h1>
-        <p className="text-xl text-white/95 mb-6 max-w-2xl mx-auto animate-slide-up font-sans leading-relaxed drop-shadow-lg">
-          Experience the warmth of home-cooked meals prepared with love and the finest ingredients. 
-          Delicious flavors and unforgettable dining experiences await you.
-        </p>
-        
-        {/* Operating Hours Badge */}
-        <div className="inline-flex items-center justify-center gap-3 bg-white/95 backdrop-blur-sm border-2 border-white rounded-full px-6 py-3 mb-8 shadow-2xl">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-natalna-dark">Open Daily</span>
-          </div>
-          <div className="w-px h-6 bg-natalna-beige"></div>
-          <div className="flex items-center gap-2 text-natalna-primary font-semibold">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-sm">6:00 AM - 10:00 PM</span>
-          </div>
-        </div>
-        
-        <div className="flex flex-wrap justify-center gap-4">
-          <a 
-            href="#menu"
-            className="bg-white text-natalna-primary px-8 py-3 rounded-lg hover:bg-natalna-gold hover:text-natalna-dark transition-all duration-300 transform hover:scale-105 font-medium shadow-2xl border-2 border-white"
-          >
-            View Menu
-          </a>
-          <button 
-            onClick={handleBookNow}
-            className="bg-natalna-primary text-white border-2 border-white px-8 py-3 rounded-lg hover:bg-natalna-wood transition-all duration-300 transform hover:scale-105 font-medium shadow-2xl"
-          >
-            Book Now
-          </button>
-        </div>
-      </div>
-    </section>
+      <section className="relative min-h-[450px] md:h-[500px] flex flex-col md:flex-row overflow-hidden bg-teamax-dark">
+        {/* Left Content (Text) */}
+        <div className="w-full md:w-1/2 flex items-center justify-center px-8 py-10 md:py-0 z-20 order-2 md:order-1 bg-teamax-dark">
+          <div className="max-w-xl text-left">
+            <h1 className="text-3xl md:text-5xl font-serif font-bold mb-4 animate-fade-in tracking-tight text-teamax-primary leading-tight">
+              {heroImages[currentSlide].title}
+              <span className="block mt-2">
+                {heroImages[currentSlide].subtitle}
+              </span>
+            </h1>
+            <p className="text-base md:text-lg mb-8 text-black/80 animate-slide-up font-sans leading-relaxed tracking-wide">
+              {heroImages[currentSlide].description}
+            </p>
 
-    {/* Booking Form Modal */}
-    {showBookingForm && (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowBookingForm(false)}>
-        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-          <div className="sticky top-0 bg-gradient-to-r from-natalna-primary to-natalna-wood p-6 border-b border-natalna-beige flex justify-between items-center">
-            <h2 className="text-2xl font-serif font-bold text-white">Make a Reservation</h2>
-            <button
-              onClick={() => setShowBookingForm(false)}
-              className="p-2 hover:bg-white/20 rounded-full transition-colors duration-200"
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8">
+              {/* Operating Hours Badge */}
+              <div className="inline-flex items-center gap-4 px-5 py-2.5 bg-black/5 backdrop-blur-md rounded-2xl border border-black/10 animate-fade-in shadow-xl">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-black/90">Open Daily</span>
+                </div>
+                <div className="w-px h-4 bg-black/20"></div>
+                <div className="flex items-center gap-2 text-black font-bold text-[10px] uppercase tracking-widest">
+                  <Clock className="w-3.5 h-3.5 text-black" />
+                  <span>{siteSettings?.store_hours || '06:00 AM - 10:00 PM'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Content (Slideshow Banner) */}
+        <div className="w-full md:w-1/2 relative h-[300px] md:h-auto order-1 md:order-2 overflow-hidden shadow-2xl">
+          {heroImages.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
             >
-              <X className="h-6 w-6 text-white" />
+              <div
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] ease-linear"
+                style={{
+                  backgroundImage: `url(${slide.url})`,
+                  transform: index === currentSlide ? 'scale(1)' : 'scale(1.1)'
+                }}
+              />
+              {/* Overlay for better transition perception */}
+              <div className="absolute inset-0 bg-gradient-to-r from-teamax-dark/30 via-transparent to-transparent md:from-teamax-dark/20" />
+            </div>
+          ))}
+
+          {/* Navigation Arrows */}
+          <div className="absolute inset-0 z-30 flex items-center justify-between px-4 pointer-events-none">
+            <button
+              onClick={prevSlide}
+              className="p-3 rounded-full bg-black/20 hover:bg-teamax-accent backdrop-blur-md transition-all text-white border border-white/10 pointer-events-auto group"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="p-3 rounded-full bg-black/20 hover:bg-teamax-accent backdrop-blur-md transition-all text-white border border-white/10 pointer-events-auto group"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
-          
-          <div className="p-6 space-y-6">
-            {/* Guest Name */}
-            <div>
-              <label className="block text-sm font-medium text-natalna-dark mb-2 flex items-center gap-2">
-                <User className="h-4 w-4" />
-                Guest Name *
-              </label>
-              <input
-                type="text"
-                value={bookingDetails.name}
-                onChange={(e) => setBookingDetails({ ...bookingDetails, name: e.target.value })}
-                className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
-                placeholder="Enter your full name"
-                required
-              />
-            </div>
 
-            {/* Contact Number */}
-            <div>
-              <label className="block text-sm font-medium text-natalna-dark mb-2 flex items-center gap-2">
-                <Phone className="h-4 w-4" />
-                Contact Number *
-              </label>
-              <input
-                type="tel"
-                value={bookingDetails.contact}
-                onChange={(e) => setBookingDetails({ ...bookingDetails, contact: e.target.value })}
-                className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
-                placeholder="09XX XXX XXXX"
-                required
-              />
-            </div>
-
-            {/* Date and Time Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Date */}
-              <div>
-                <label className="block text-sm font-medium text-natalna-dark mb-2 flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  Reservation Date *
-                </label>
-                <input
-                  type="date"
-                  value={bookingDetails.date}
-                  onChange={(e) => setBookingDetails({ ...bookingDetails, date: e.target.value })}
-                  min={getTodayDate()}
-                  className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
-                  required
-                />
-              </div>
-
-              {/* Time */}
-              <div>
-                <label className="block text-sm font-medium text-natalna-dark mb-2 flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  Reservation Time *
-                </label>
-                <input
-                  type="time"
-                  value={bookingDetails.time}
-                  onChange={(e) => setBookingDetails({ ...bookingDetails, time: e.target.value })}
-                  min="06:00"
-                  max="22:00"
-                  className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">Operating hours: 6:00 AM - 10:00 PM</p>
-              </div>
-            </div>
-
-            {/* Party Size */}
-            <div>
-              <label className="block text-sm font-medium text-natalna-dark mb-2 flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Number of Guests
-              </label>
-              <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => setBookingDetails({ ...bookingDetails, partySize: Math.max(1, bookingDetails.partySize - 1) })}
-                  className="w-10 h-10 bg-natalna-beige text-natalna-dark rounded-lg hover:bg-natalna-secondary transition-colors duration-200 font-bold"
-                >
-                  −
-                </button>
-                <input
-                  type="number"
-                  value={bookingDetails.partySize}
-                  onChange={(e) => setBookingDetails({ ...bookingDetails, partySize: Math.max(1, parseInt(e.target.value) || 1) })}
-                  className="w-20 px-4 py-3 border border-natalna-beige rounded-lg text-center focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
-                  min="1"
-                />
-                <button
-                  type="button"
-                  onClick={() => setBookingDetails({ ...bookingDetails, partySize: bookingDetails.partySize + 1 })}
-                  className="w-10 h-10 bg-natalna-beige text-natalna-dark rounded-lg hover:bg-natalna-secondary transition-colors duration-200 font-bold"
-                >
-                  +
-                </button>
-                <span className="text-natalna-dark font-medium">{bookingDetails.partySize === 1 ? 'person' : 'people'}</span>
-              </div>
-            </div>
-
-            {/* Special Requests */}
-            <div>
-              <label className="block text-sm font-medium text-natalna-dark mb-2 flex items-center gap-2">
-                <MessageSquare className="h-4 w-4" />
-                Special Requests (Optional)
-              </label>
-              <textarea
-                value={bookingDetails.specialRequests}
-                onChange={(e) => setBookingDetails({ ...bookingDetails, specialRequests: e.target.value })}
-                className="w-full px-4 py-3 border border-natalna-beige rounded-lg focus:ring-2 focus:ring-natalna-primary focus:border-transparent transition-all duration-200"
-                placeholder="Any dietary restrictions, seating preferences, or special occasions..."
-                rows={3}
-              />
-            </div>
-
-            {/* Info Box */}
-            <div className="bg-natalna-cream border-2 border-natalna-gold rounded-lg p-4">
-              <p className="text-sm text-natalna-dark">
-                📱 After submitting, you'll be redirected to Messenger to send your reservation request. We'll confirm your booking shortly!
-              </p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3">
+          {/* Slide Indicators */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 md:left-auto md:right-10 md:translate-x-0 z-30 flex gap-2">
+            {heroImages.map((_, index) => (
               <button
-                onClick={() => setShowBookingForm(false)}
-                className="flex-1 py-3 border-2 border-natalna-beige text-natalna-dark rounded-lg hover:bg-natalna-cream transition-all duration-200 font-medium"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmitBooking}
-                className="flex-1 py-3 bg-gradient-to-r from-natalna-primary to-natalna-wood text-white rounded-lg hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 font-medium shadow-md"
-              >
-                Send Reservation
-              </button>
-            </div>
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-1.5 transition-all duration-300 rounded-full shadow-lg ${index === currentSlide ? 'bg-teamax-accent w-8' : 'bg-white/40 w-4 hover:bg-white/60'
+                  }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
-      </div>
-    )}
+      </section>
     </>
   );
 };

@@ -110,7 +110,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={handleCancel}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+                  className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
                 >
                   <ArrowLeft className="h-5 w-5" />
                   <span>Back</span>
@@ -129,7 +129,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                 </button>
                 <button
                   onClick={handleSaveCategory}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
+                  className="px-4 py-2 bg-green-600 text-black rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
                 >
                   <Save className="h-4 w-4" />
                   <span>Save</span>
@@ -163,8 +163,8 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                   placeholder="kebab-case-id"
                   disabled={currentView === 'edit'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  {currentView === 'edit' 
+                <p className="text-xs text-black mt-1">
+                  {currentView === 'edit'
                     ? 'Category ID cannot be changed after creation'
                     : 'Use kebab-case format (e.g., "hot-drinks", "cold-beverages")'
                   }
@@ -185,7 +185,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                     {formData.icon}
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-black mt-1">
                   Use an emoji or icon character (e.g., ☕, 🧊, 🫖, 🥐)
                 </p>
               </div>
@@ -199,7 +199,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="0"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-black mt-1">
                   Lower numbers appear first in the menu
                 </p>
               </div>
@@ -231,7 +231,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
-                className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                className="flex items-center space-x-2 bg-green-600 text-black px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
               >
                 <ArrowLeft className="h-5 w-5" />
                 <span>Dashboard</span>
@@ -240,7 +240,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
             </div>
             <button
               onClick={handleAddCategory}
-              className="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+              className="flex items-center space-x-2 bg-black text-black px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200"
             >
               <Plus className="h-4 w-4" />
               <span>Add Category</span>
@@ -253,13 +253,13 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="p-6">
             <h2 className="text-lg font-playfair font-medium text-black mb-4">Categories</h2>
-            
+
             {categories.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">No categories found</p>
+                <p className="text-black mb-4">No categories found</p>
                 <button
                   onClick={handleAddCategory}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                  className="bg-green-600 text-black px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                   Add First Category
                 </button>
@@ -269,39 +269,42 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                 {categories.map((category) => (
                   <div
                     key={category.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                    className="flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                   >
                     <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-2 text-gray-400 cursor-move">
+                      <div className="flex items-center space-x-2 text-black cursor-move">
                         <GripVertical className="h-4 w-4" />
-                        <span className="text-sm text-gray-500">#{category.sort_order}</span>
+                        <span className="text-sm text-black">#{category.sort_order}</span>
                       </div>
                       <div className="text-2xl">{category.icon}</div>
                       <div>
                         <h3 className="font-medium text-black">{category.name}</h3>
-                        <p className="text-sm text-gray-500">ID: {category.id}</p>
+                        <p className="text-sm text-black">ID: {category.id}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        category.active 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${category.active
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                        }`}>
                         {category.active ? 'Active' : 'Inactive'}
                       </span>
-                      
+
                       <button
                         onClick={() => handleEditCategory(category)}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors duration-200"
+                        className="p-2 text-black hover:text-black hover:bg-gray-100 rounded transition-colors duration-200"
+                        title="Edit Category"
+                        aria-label="Edit Category"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
-                      
+
                       <button
                         onClick={() => handleDeleteCategory(category.id)}
                         className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors duration-200"
+                        title="Delete Category"
+                        aria-label="Delete Category"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

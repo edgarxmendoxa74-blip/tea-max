@@ -12,7 +12,7 @@ import { initializeDatabase } from '../utils/initializeDatabase';
 
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('beracah_admin_auth') === 'true';
+    return localStorage.getItem('teamax_admin_auth') === 'true';
   });
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -36,7 +36,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleAddItem = () => {
     setCurrentView('add');
-    const defaultCategory = categories.length > 0 ? categories[0].id : 'dim-sum';
+    const defaultCategory = categories.length > 0 ? categories[0].id : 'milk-tea';
     setFormData({
       name: '',
       description: '',
@@ -103,10 +103,10 @@ const AdminDashboard: React.FC = () => {
       const item = menuItems.find(i => i.id === id);
       return item ? item.name : 'Unknown Item';
     }).slice(0, 5); // Show first 5 items
-    
+
     const displayNames = itemNames.join(', ');
     const moreItems = selectedItems.length > 5 ? ` and ${selectedItems.length - 5} more items` : '';
-    
+
     if (confirm(`Are you sure you want to delete ${selectedItems.length} item(s)?\n\nItems to delete: ${displayNames}${moreItems}\n\nThis action cannot be undone.`)) {
       try {
         setIsProcessing(true);
@@ -153,8 +153,8 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleSelectItem = (itemId: string) => {
-    setSelectedItems(prev => 
-      prev.includes(itemId) 
+    setSelectedItems(prev =>
+      prev.includes(itemId)
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
     );
@@ -233,9 +233,9 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'Natalnas@Admin!2025') {
+    if (password === 'TeaMax@Admin!2025') {
       setIsAuthenticated(true);
-      localStorage.setItem('beracah_admin_auth', 'true');
+      localStorage.setItem('teamax_admin_auth', 'true');
       setLoginError('');
     } else {
       setLoginError('Invalid password');
@@ -244,7 +244,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('beracah_admin_auth');
+    localStorage.removeItem('teamax_admin_auth');
     setPassword('');
     setCurrentView('dashboard');
   };
@@ -271,24 +271,24 @@ const AdminDashboard: React.FC = () => {
   // Login Screen
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+      <div className="min-h-screen bg-teamax-dark flex items-center justify-center">
+        <div className="bg-teamax-surface rounded-3xl shadow-2xl p-8 w-full max-w-md border border-teamax-border">
           <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mb-4">
-              <Lock className="h-8 w-8 text-white" />
+            <div className="mx-auto w-16 h-16 bg-white border border-black rounded-full flex items-center justify-center mb-4">
+              <Lock className="h-8 w-8 text-black" />
             </div>
-            <h1 className="text-2xl font-playfair font-semibold text-black">Admin Access</h1>
-            <p className="text-gray-600 mt-2">Enter password to access the admin dashboard</p>
+            <h1 className="text-2xl font-serif font-bold text-black">Admin Access</h1>
+            <p className="text-black mt-2">Enter password to access the admin dashboard</p>
           </div>
-          
+
           <form onSubmit={handleLogin}>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-black mb-2">Password</label>
+              <label className="block text-xs font-bold text-black uppercase tracking-widest mb-2 px-1">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                className="w-full px-4 py-3 bg-white border border-teamax-border rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none"
                 placeholder="Enter admin password"
                 required
               />
@@ -296,10 +296,10 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-red-500 text-sm mt-2">{loginError}</p>
               )}
             </div>
-            
+
             <button
               type="submit"
-              className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium"
+              className="w-full bg-white text-black border border-black py-4 rounded-xl hover:brightness-110 transition-all font-bold uppercase tracking-widest text-xs shadow-lg shadow-black/20"
             >
               Access Dashboard
             </button>
@@ -311,10 +311,10 @@ const AdminDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-teamax-dark flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-black font-serif">Loading Dashboard...</p>
         </div>
       </div>
     );
@@ -323,36 +323,36 @@ const AdminDashboard: React.FC = () => {
   // Form View (Add/Edit)
   if (currentView === 'add' || currentView === 'edit') {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="bg-white shadow-sm border-b">
+      <div className="min-h-screen bg-teamax-dark">
+        <div className="bg-white shadow-sm border-b border-teamax-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={handleCancel}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+                  className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
                 >
                   <ArrowLeft className="h-5 w-5" />
-                  <span>Back</span>
+                  <span className="font-bold uppercase tracking-widest text-[10px]">Back</span>
                 </button>
-                <h1 className="text-2xl font-playfair font-semibold text-black">
+                <h1 className="text-xl font-serif font-bold text-black">
                   {currentView === 'add' ? 'Add New Item' : 'Edit Item'}
                 </h1>
               </div>
               <div className="flex space-x-3">
                 <button
                   onClick={handleCancel}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center space-x-2"
+                  className="px-5 py-2 border border-teamax-border rounded-xl hover:bg-teamax-surface transition-colors duration-200 flex items-center space-x-2 font-bold uppercase tracking-widest text-[10px] text-black"
                 >
                   <X className="h-4 w-4" />
                   <span>Cancel</span>
                 </button>
                 <button
                   onClick={handleSaveItem}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center space-x-2"
+                  className="px-5 py-2 bg-white text-black border border-black rounded-xl hover:brightness-110 transition-colors duration-200 flex items-center space-x-2 font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-black/20"
                 >
                   <Save className="h-4 w-4" />
-                  <span>Save</span>
+                  <span>Save Item</span>
                 </button>
               </div>
             </div>
@@ -469,7 +469,7 @@ const AdminDashboard: React.FC = () => {
                   />
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-black mt-2">
                 Leave dates empty for indefinite discount period. Discount will only be active if "Enable Discount" is checked and current time is within the date range.
               </p>
             </div>
@@ -587,37 +587,37 @@ const AdminDashboard: React.FC = () => {
   // Items List View
   if (currentView === 'items') {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="bg-white shadow-sm border-b">
+      <div className="min-h-screen bg-teamax-dark">
+        <div className="bg-white shadow-sm border-b border-teamax-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setCurrentView('dashboard')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+                  className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
                 >
                   <ArrowLeft className="h-5 w-5" />
-                  <span>Dashboard</span>
+                  <span className="font-bold uppercase tracking-widest text-[10px]">Dashboard</span>
                 </button>
-                <h1 className="text-2xl font-playfair font-semibold text-black">Menu Items</h1>
+                <h1 className="text-xl font-serif font-bold text-black">Menu Items</h1>
               </div>
               <div className="flex items-center space-x-3">
                 {showBulkActions && (
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-600">
-                      {selectedItems.length} item(s) selected
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-black">
+                      {selectedItems.length} selected
                     </span>
                     <button
                       onClick={() => setShowBulkActions(!showBulkActions)}
-                      className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                      className="px-4 py-2 bg-black/5 text-black rounded-xl hover:bg-black hover:text-black transition-all duration-200 font-bold uppercase tracking-widest text-[10px]"
                     >
-                      <span>Bulk Actions</span>
+                      Bulk Actions
                     </button>
                   </div>
                 )}
                 <button
                   onClick={handleAddItem}
-                  className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                  className="flex items-center space-x-2 bg-white text-black border border-black px-5 py-2 rounded-xl hover:brightness-110 transition-all font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-black/20"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Add New Item</span>
@@ -634,13 +634,13 @@ const AdminDashboard: React.FC = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-medium text-black mb-1">Bulk Actions</h3>
-                  <p className="text-sm text-gray-600">{selectedItems.length} item(s) selected</p>
+                  <p className="text-sm text-black">{selectedItems.length} item(s) selected</p>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-3">
                   {/* Change Category */}
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Change Category:</label>
+                    <label className="text-sm font-medium text-black">Change Category:</label>
                     <select
                       onChange={(e) => {
                         if (e.target.value) {
@@ -657,24 +657,24 @@ const AdminDashboard: React.FC = () => {
                       ))}
                     </select>
                   </div>
-                  
+
                   {/* Remove Items */}
                   <button
                     onClick={handleBulkRemove}
                     disabled={isProcessing}
-                    className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="flex items-center space-x-2 bg-red-600 text-black px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>{isProcessing ? 'Removing...' : 'Remove Selected'}</span>
                   </button>
-                  
+
                   {/* Clear Selection */}
                   <button
                     onClick={() => {
                       setSelectedItems([]);
                       setShowBulkActions(false);
                     }}
-                    className="flex items-center space-x-2 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm"
+                    className="flex items-center space-x-2 bg-gray-500 text-black px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm"
                   >
                     <X className="h-4 w-4" />
                     <span>Clear Selection</span>
@@ -687,7 +687,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             {/* Bulk Actions Bar */}
             {menuItems.length > 0 && (
-              <div className="bg-gray-50 border-b border-gray-200 px-6 py-3">
+              <div className="bg-gray-50 border-b border-gray-300 px-6 py-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <label className="flex items-center space-x-2">
@@ -697,19 +697,19 @@ const AdminDashboard: React.FC = () => {
                         onChange={handleSelectAll}
                         className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                       />
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-sm font-medium text-black">
                         Select All ({menuItems.length} items)
                       </span>
                     </label>
                   </div>
                   {selectedItems.length > 0 && (
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-black">
                         {selectedItems.length} item(s) selected
                       </span>
                       <button
                         onClick={() => setSelectedItems([])}
-                        className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                        className="text-sm text-black hover:text-black transition-colors duration-200"
                       >
                         Clear Selection
                       </button>
@@ -724,16 +724,16 @@ const AdminDashboard: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">
                       Select
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Name</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Category</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Price</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Variations</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Add-ons</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">Actions</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Name</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Category</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Price</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Variations</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Add-ons</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Status</th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-black">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -749,43 +749,42 @@ const AdminDashboard: React.FC = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="font-medium text-gray-900">{item.name}</div>
-                          <div className="text-sm text-gray-500 truncate max-w-xs">{item.description}</div>
+                          <div className="font-medium text-black">{item.name}</div>
+                          <div className="text-sm text-black truncate max-w-xs">{item.description}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-black">
                         {categories.find(cat => cat.id === item.category)?.name}
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 text-sm font-medium text-black">
                         <div className="flex flex-col">
                           {item.isOnDiscount && item.discountPrice ? (
                             <>
                               <span className="text-red-600 font-semibold">₱{item.discountPrice}</span>
-                              <span className="text-gray-500 line-through text-xs">₱{item.basePrice}</span>
+                              <span className="text-black line-through text-xs">₱{item.basePrice}</span>
                             </>
                           ) : (
                             <span>₱{item.basePrice}</span>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-black">
                         {item.variations?.length || 0} variations
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-black">
                         {item.addOns?.length || 0} add-ons
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col space-y-1">
                           {item.popular && (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-black">
                               Popular
                             </span>
                           )}
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            item.available 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-red-100 text-red-800'
-                          }`}>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.available
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                            }`}>
                             {item.available ? 'Available' : 'Unavailable'}
                           </span>
                         </div>
@@ -795,7 +794,7 @@ const AdminDashboard: React.FC = () => {
                           <button
                             onClick={() => handleEditItem(item)}
                             disabled={isProcessing}
-                            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors duration-200"
+                            className="p-2 text-black hover:text-black hover:bg-gray-100 rounded transition-colors duration-200"
                           >
                             <Edit className="h-4 w-4" />
                           </button>
@@ -817,7 +816,7 @@ const AdminDashboard: React.FC = () => {
             {/* Mobile Card View */}
             <div className="md:hidden">
               {menuItems.map((item) => (
-                <div key={item.id} className={`p-4 border-b border-gray-200 last:border-b-0 ${selectedItems.includes(item.id) ? 'bg-blue-50' : ''}`}>
+                <div key={item.id} className={`p-4 border-b border-gray-300 last:border-b-0 ${selectedItems.includes(item.id) ? 'bg-blue-50' : ''}`}>
                   <div className="flex items-center justify-between mb-3">
                     <label className="flex items-center space-x-2">
                       <input
@@ -826,13 +825,13 @@ const AdminDashboard: React.FC = () => {
                         onChange={() => handleSelectItem(item.id)}
                         className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                       />
-                      <span className="text-sm text-gray-600">Select</span>
+                      <span className="text-sm text-black">Select</span>
                     </label>
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleEditItem(item)}
                         disabled={isProcessing}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors duration-200"
+                        className="p-2 text-black hover:text-black hover:bg-gray-100 rounded transition-colors duration-200"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
@@ -845,56 +844,55 @@ const AdminDashboard: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-gray-900 truncate">{item.name}</h3>
-                      <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.description}</p>
+                      <h3 className="font-medium text-black truncate">{item.name}</h3>
+                      <p className="text-sm text-black mt-1 line-clamp-2">{item.description}</p>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-500">Category:</span>
-                      <span className="ml-1 text-gray-900">
+                      <span className="text-black">Category:</span>
+                      <span className="ml-1 text-black">
                         {categories.find(cat => cat.id === item.category)?.name}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-500">Price:</span>
-                      <span className="ml-1 font-medium text-gray-900">
+                      <span className="text-black">Price:</span>
+                      <span className="ml-1 font-medium text-black">
                         {item.isOnDiscount && item.discountPrice ? (
                           <span className="text-red-600">₱{item.discountPrice}</span>
                         ) : (
                           `₱${item.basePrice}`
                         )}
                         {item.isOnDiscount && item.discountPrice && (
-                          <span className="text-gray-500 line-through text-xs ml-1">₱{item.basePrice}</span>
+                          <span className="text-black line-through text-xs ml-1">₱{item.basePrice}</span>
                         )}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-500">Variations:</span>
-                      <span className="ml-1 text-gray-900">{item.variations?.length || 0}</span>
+                      <span className="text-black">Variations:</span>
+                      <span className="ml-1 text-black">{item.variations?.length || 0}</span>
                     </div>
                     <div>
-                      <span className="text-gray-500">Add-ons:</span>
-                      <span className="ml-1 text-gray-900">{item.addOns?.length || 0}</span>
+                      <span className="text-black">Add-ons:</span>
+                      <span className="ml-1 text-black">{item.addOns?.length || 0}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center space-x-2">
                       {item.popular && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-black">
                           Popular
                         </span>
                       )}
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        item.available 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.available
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                        }`}>
                         {item.available ? 'Available' : 'Unavailable'}
                       </span>
                     </div>
@@ -928,7 +926,7 @@ const AdminDashboard: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setCurrentView('dashboard')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200"
+                  className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
                 >
                   <ArrowLeft className="h-5 w-5" />
                   <span>Dashboard</span>
@@ -948,24 +946,26 @@ const AdminDashboard: React.FC = () => {
 
   // Dashboard View
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-teamax-dark">
+      <div className="bg-white shadow-sm border-b border-teamax-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Coffee className="h-8 w-8 text-black" />
-              <h1 className="text-2xl font-noto font-semibold text-black">Natalna's Admin</h1>
+              <div className="p-2 bg-white border border-black rounded-xl">
+                <Coffee className="h-6 w-6 text-black" />
+              </div>
+              <h1 className="text-xl font-serif font-bold text-black">WebNegosyo Admin Dashboard</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6">
               <a
                 href="/"
-                className="text-gray-600 hover:text-black transition-colors duration-200"
+                className="text-[10px] font-bold uppercase tracking-widest text-black hover:text-black transition-colors duration-200"
               >
                 View Website
               </a>
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-black transition-colors duration-200"
+                className="text-[10px] font-bold uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors duration-200"
               >
                 Logout
               </button>
@@ -977,118 +977,145 @@ const AdminDashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6 border border-teamax-border">
             <div className="flex items-center">
-              <div className="p-2 bg-green-600 rounded-lg">
-                <Package className="h-6 w-6 text-white" />
+              <div className="p-3 bg-black/5 rounded-xl">
+                <Package className="h-6 w-6 text-black" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Items</p>
-                <p className="text-2xl font-semibold text-gray-900">{totalItems}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-black">Total Items</p>
+                <p className="text-2xl font-bold text-black">{totalItems}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6 border border-teamax-border">
             <div className="flex items-center">
-              <div className="p-2 bg-green-500 rounded-lg">
-                <TrendingUp className="h-6 w-6 text-white" />
+              <div className="p-3 bg-green-50 rounded-xl">
+                <TrendingUp className="h-6 w-6 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Available Items</p>
-                <p className="text-2xl font-semibold text-gray-900">{availableItems}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-black">Available</p>
+                <p className="text-2xl font-bold text-black">{availableItems}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6 border border-teamax-border">
             <div className="flex items-center">
-              <div className="p-2 bg-cream-500 rounded-lg">
-                <Coffee className="h-6 w-6 text-white" />
+              <div className="p-3 bg-orange-50 rounded-xl">
+                <Coffee className="h-6 w-6 text-orange-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Popular Items</p>
-                <p className="text-2xl font-semibold text-gray-900">{popularItems}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-black">Popular</p>
+                <p className="text-2xl font-bold text-black">{popularItems}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6 border border-teamax-border">
             <div className="flex items-center">
-              <div className="p-2 bg-green-500 rounded-lg">
-                <Users className="h-6 w-6 text-white" />
+              <div className="p-3 bg-blue-50 rounded-xl">
+                <Users className="h-6 w-6 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active</p>
-                <p className="text-2xl font-semibold text-gray-900">Online</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-black">Status</p>
+                <p className="text-2xl font-bold text-black">Online</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-lg font-playfair font-medium text-black mb-4">Quick Actions</h3>
-            <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 bg-white rounded-3xl shadow-sm p-8 border border-teamax-border">
+            <h3 className="text-lg font-serif font-bold text-black mb-8 flex items-center gap-3">
+              <div className="w-1.5 h-6 bg-black rounded-full"></div>
+              Quick Management
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 onClick={handleAddItem}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <Plus className="h-5 w-5 text-gray-400" />
-                <span className="font-medium text-gray-900">Add New Menu Item</span>
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                  <Plus className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block font-bold text-black text-sm group-hover:text-black transition-colors">Add New Item</span>
+                  <span className="text-[10px] text-black uppercase tracking-widest opacity-60">Create Menu Entry</span>
+                </div>
               </button>
+
               <button
                 onClick={() => setCurrentView('items')}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <Package className="h-5 w-5 text-gray-400" />
-                <span className="font-medium text-gray-900">Manage Menu Items</span>
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                  <Package className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block font-bold text-black text-sm group-hover:text-black transition-colors">Manage Menu</span>
+                  <span className="text-[10px] text-black uppercase tracking-widest opacity-60">Edit & Update All</span>
+                </div>
               </button>
+
               <button
                 onClick={() => setCurrentView('categories')}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <FolderOpen className="h-5 w-5 text-gray-400" />
-                <span className="font-medium text-gray-900">Manage Categories</span>
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                  <FolderOpen className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block font-bold text-black text-sm group-hover:text-black transition-colors">Categories</span>
+                  <span className="text-[10px] text-black uppercase tracking-widest opacity-60">Organize Menu</span>
+                </div>
               </button>
+
               <button
                 onClick={() => setCurrentView('payments')}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
-                <CreditCard className="h-5 w-5 text-gray-400" />
-                <span className="font-medium text-gray-900">Payment Methods</span>
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                  <CreditCard className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block font-bold text-black text-sm group-hover:text-black transition-colors">Payments</span>
+                  <span className="text-[10px] text-black uppercase tracking-widest opacity-60">Payout Methods</span>
+                </div>
               </button>
+
               <button
                 onClick={() => setCurrentView('settings')}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300 sm:col-span-2"
               >
-                <Settings className="h-5 w-5 text-gray-400" />
-                <span className="font-medium text-gray-900">Site Settings</span>
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-white transition-all">
+                  <Settings className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block font-bold text-black text-sm group-hover:text-black transition-colors">System Settings</span>
+                  <span className="text-[10px] text-black uppercase tracking-widest opacity-60">Store & UI Configuration</span>
+                </div>
               </button>
-              {totalItems === 0 && (
-                <button
-                  onClick={handleInitializeDatabase}
-                  disabled={isProcessing}
-                  className="w-full flex items-center space-x-3 p-3 text-left bg-gradient-to-r from-natalna-primary to-natalna-wood text-white rounded-lg hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 disabled:opacity-50"
-                >
-                  <Database className="h-5 w-5" />
-                  <span className="font-medium">{isProcessing ? 'Loading...' : 'Load Sample Menu Items'}</span>
-                </button>
-              )}
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-lg font-playfair font-medium text-black mb-4">Categories Overview</h3>
-            <div className="space-y-3">
+          <div className="bg-white rounded-3xl shadow-sm p-8 border border-teamax-border">
+            <h3 className="text-lg font-serif font-bold text-black mb-8 flex items-center gap-3">
+              <div className="w-1.5 h-6 bg-black rounded-full"></div>
+              Categories
+            </h3>
+            <div className="space-y-4">
               {categoryCounts.map((category) => (
-                <div key={category.id} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg">{category.icon}</span>
-                    <span className="font-medium text-gray-900">{category.name}</span>
+                <div key={category.id} className="flex items-center justify-between p-4 bg-teamax-surface rounded-2xl border border-teamax-border/50">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-xl bg-white p-2 rounded-xl shadow-sm border border-teamax-border/30">{category.icon}</span>
+                    <span className="font-bold text-black text-sm">{category.name}</span>
                   </div>
-                  <span className="text-sm text-gray-500">{category.count} items</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-white px-2 py-1 rounded-lg border border-teamax-border/30">
+                    {category.count} items
+                  </span>
                 </div>
               ))}
             </div>

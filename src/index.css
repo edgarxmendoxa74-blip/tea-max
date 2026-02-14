@@ -1,60 +1,37 @@
 /* Import elegant fonts - must be first */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Lato:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Natalna Restaurant Custom Styles - Green Aesthetic Theme */
+/* Tea Max Milk Tea Hub Custom Styles - Clean & Minimalist Aesthetic */
 
-/* Performance Optimizations */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --primary: #09090B;
+  --accent: #A67B5B;
+  --bg-main: #FFFFFF;
 }
 
-/* Smooth scrolling with better performance */
-html {
-  scroll-behavior: smooth;
+body {
+  @apply bg-teamax-dark text-teamax-primary;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+.app-bg {
+  @apply bg-teamax-dark min-h-screen content-center;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-/* GPU acceleration for common transforms */
-.transform,
-[class*="hover:scale"],
-[class*="group-hover:scale"] {
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
+/* Hide scrollbar for mobile nav */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Optimize images */
-img {
-  content-visibility: auto;
-  contain-intrinsic-size: 300px 200px;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
-
-/* Minimal helpers for natalna palette when needed outside tailwind tokens */
-.bg-natalna-cream { background-color: #F1F8F5; }
-.bg-natalna-beige { background-color: #E8F5ED; }
-.bg-natalna-primary { background-color: #2D7A4F; }
-.text-natalna-primary { color: #2D7A4F; }
-.text-natalna-dark { color: #1B4332; }
-.text-natalna-secondary { color: #4A9D6F; }
-.border-natalna-beige { border-color: #E8F5ED; }
-.border-natalna-gold { border-color: #85C9A0; }
-.ring-natalna-gold { --tw-ring-color: #85C9A0; }
 
 /* Hide scrollbar for mobile nav */
 .scrollbar-hide {

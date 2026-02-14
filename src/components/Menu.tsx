@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuItem, CartItem } from '../types';
 import { useCategories } from '../hooks/useCategories';
 import MenuItemCard from './MenuItemCard';
-import MobileNav from './MobileNav';
 
 // Preload images for better performance
 const preloadImages = (items: MenuItem[]) => {
@@ -23,15 +22,15 @@ interface MenuProps {
 
 const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuantity }) => {
   const { categories } = useCategories();
-  const [activeCategory, setActiveCategory] = React.useState('hot-coffee');
+  const [activeCategory, setActiveCategory] = useState('hot-coffee');
 
   // Preload images when menu items change
-  React.useEffect(() => {
+  useEffect(() => {
     if (menuItems.length > 0) {
       // Preload images for visible category first
       const visibleItems = menuItems.filter(item => item.category === activeCategory);
       preloadImages(visibleItems);
-      
+
       // Then preload other images after a short delay
       setTimeout(() => {
         const otherItems = menuItems.filter(item => item.category !== activeCategory);
@@ -40,23 +39,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
     }
   }, [menuItems, activeCategory]);
 
-  const handleCategoryClick = (categoryId: string) => {
-    setActiveCategory(categoryId);
-    const element = document.getElementById(categoryId);
-    if (element) {
-      const headerHeight = 64; // Header height
-      const mobileNavHeight = 60; // Mobile nav height
-      const offset = headerHeight + mobileNavHeight + 20; // Extra padding
-      const elementPosition = element.offsetTop - offset;
-      
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (categories.length > 0) {
       // Set default to dim-sum if it exists, otherwise first category
       const defaultCategory = categories.find(cat => cat.id === 'dim-sum') || categories[0];
@@ -66,9 +49,9 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
     }
   }, [categories, activeCategory]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let ticking = false;
-    
+
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
@@ -95,48 +78,40 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
 
   return (
     <>
-      <MobileNav 
-        activeCategory={activeCategory}
-        onCategoryClick={handleCategoryClick}
-      />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-serif font-bold text-natalna-dark mb-4">Our Homemade Menu</h2>
-        <p className="text-natalna-secondary text-lg max-w-2xl mx-auto font-sans">
-          Savor authentic homemade dishes prepared with love and the finest ingredients. 
-          Every meal is crafted to make you feel at home.
-        </p>
-      </div>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-serif font-bold text-teamax-primary mb-4">Our Menu</h2>
+        </div>
 
-      {categories.map((category) => {
-        const categoryItems = menuItems.filter(item => item.category === category.id);
-        
-        if (categoryItems.length === 0) return null;
-        
-        return (
-          <section key={category.id} id={category.id} className="mb-16">
-            <div className="flex items-center mb-8">
-              <span className="text-3xl mr-3">{category.icon}</span>
-              <h3 className="text-3xl font-serif font-semibold text-natalna-dark">{category.name}</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categoryItems.map((item) => {
-                const cartItem = cartItems.find(cartItem => cartItem.id === item.id);
-                return (
-                  <MenuItemCard
-                    key={item.id}
-                    item={item}
-                    onAddToCart={addToCart}
-                    quantity={cartItem?.quantity || 0}
-                    onUpdateQuantity={updateQuantity}
-                  />
-                );
-              })}
-            </div>
-          </section>
-        );
-      })}
+        {categories.map((category) => {
+          const categoryItems = menuItems.filter(item => item.category === category.id);
+
+          if (categoryItems.length === 0) return null;
+
+          return (
+            <section key={category.id} id={category.id} className="mb-16">
+              <div className="flex items-center mb-8">
+                <span className="text-3xl mr-3">{category.icon}</span>
+                <h3 className="text-3xl font-serif font-semibold text-teamax-primary">{category.name}</h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {categoryItems.map((item) => {
+                  const cartItem = cartItems.find(cartItem => cartItem.id === item.id);
+                  return (
+                    <MenuItemCard
+                      key={item.id}
+                      item={item}
+                      onAddToCart={addToCart}
+                      quantity={cartItem?.quantity || 0}
+                      onUpdateQuantity={updateQuantity}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
       </main>
     </>
   );

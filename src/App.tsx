@@ -8,7 +8,6 @@ import Menu from './components/Menu';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import FloatingCartButton from './components/FloatingCartButton';
-import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
 import { useMenu } from './hooks/useMenu';
 
@@ -27,32 +26,22 @@ function MainApp() {
   };
 
   // Filter menu items based on selected category
-  const filteredMenuItems = selectedCategory === 'all' 
-    ? menuItems 
+  const filteredMenuItems = selectedCategory === 'all'
+    ? menuItems
     : menuItems.filter(item => item.category === selectedCategory);
 
   return (
-    <div 
-      className="min-h-screen font-sans"
-      style={{
-        backgroundImage: `linear-gradient(rgba(241, 248, 245, 0.95), rgba(232, 245, 237, 0.97)), url('/hero-background.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      <Header 
+    <div className="min-h-screen font-sans app-bg">
+      <Header
         cartItemsCount={cart.getTotalItems()}
         onCartClick={() => handleViewChange('cart')}
-        onMenuClick={() => handleViewChange('menu')}
       />
       <SubNav selectedCategory={selectedCategory} onCategoryClick={handleCategoryClick} />
-      
+
       {currentView === 'menu' && (
         <>
           <Hero />
-          <Menu 
+          <Menu
             menuItems={filteredMenuItems}
             addToCart={cart.addToCart}
             cartItems={cart.cartItems}
@@ -60,9 +49,9 @@ function MainApp() {
           />
         </>
       )}
-      
+
       {currentView === 'cart' && (
-        <Cart 
+        <Cart
           cartItems={cart.cartItems}
           updateQuantity={cart.updateQuantity}
           removeFromCart={cart.removeFromCart}
@@ -72,22 +61,21 @@ function MainApp() {
           onCheckout={() => handleViewChange('checkout')}
         />
       )}
-      
+
       {currentView === 'checkout' && (
-        <Checkout 
+        <Checkout
           cartItems={cart.cartItems}
           totalPrice={cart.getTotalPrice()}
           onBack={() => handleViewChange('cart')}
         />
       )}
-      
+
       {currentView === 'menu' && (
         <>
-          <FloatingCartButton 
+          <FloatingCartButton
             itemCount={cart.getTotalItems()}
             onCartClick={() => handleViewChange('cart')}
           />
-          <Footer />
         </>
       )}
     </div>

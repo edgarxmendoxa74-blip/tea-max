@@ -24,13 +24,13 @@ const Cart: React.FC<CartProps> = ({
   if (cartItems.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center py-16">
-          <div className="text-6xl mb-4">🛒</div>
-          <h2 className="text-2xl font-serif font-semibold text-natalna-dark mb-2">Your cart is empty</h2>
-          <p className="text-natalna-secondary mb-6">Add some delicious items to get started!</p>
+        <div className="text-center py-20 bg-teamax-surface rounded-3xl border border-teamax-border shadow-xl">
+          <div className="text-7xl mb-6">🛒</div>
+          <h2 className="text-3xl font-serif font-bold text-white mb-2">Your cart is empty</h2>
+          <p className="text-teamax-secondary mb-10 max-w-sm mx-auto">Add some delicious items from our menu to get started with your order!</p>
           <button
             onClick={onContinueShopping}
-            className="bg-natalna-primary text-white px-6 py-3 rounded-lg hover:bg-natalna-wood transition-all duration-200 shadow-md"
+            className="bg-teamax-accent text-white px-10 py-4 rounded-full hover:brightness-110 transition-all font-bold uppercase tracking-widest text-sm shadow-xl shadow-teamax-accent/20"
           >
             Browse Menu
           </button>
@@ -40,71 +40,74 @@ const Cart: React.FC<CartProps> = ({
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-4xl mx-auto px-4 py-12 pb-24">
+      <div className="flex items-center justify-between mb-10">
         <button
           onClick={onContinueShopping}
-          className="flex items-center space-x-2 text-natalna-secondary hover:text-natalna-dark transition-colors duration-200"
+          className="flex items-center space-x-2 text-teamax-secondary hover:text-white transition-all group"
         >
-          <ArrowLeft className="h-5 w-5" />
-          <span>Continue Shopping</span>
+          <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+          <span className="font-bold uppercase tracking-widest text-xs">Back to Menu</span>
         </button>
-        <h1 className="text-3xl font-serif font-semibold text-natalna-dark">Your Cart</h1>
+        <h1 className="text-4xl font-serif font-bold text-white">Your Cart</h1>
         <button
           onClick={clearCart}
-          className="text-natalna-terracotta hover:text-red-600 transition-colors duration-200"
+          className="text-red-500 hover:text-red-400 transition-colors font-bold uppercase tracking-widest text-xs"
         >
           Clear All
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+      <div className="bg-teamax-surface rounded-3xl shadow-xl overflow-hidden border border-teamax-border mb-8">
         {cartItems.map((item, index) => (
-          <div key={item.id} className={`p-6 ${index !== cartItems.length - 1 ? 'border-b border-cream-200' : ''}`}>
-            <div className="flex items-center justify-between">
+          <div key={item.id} className={`p-8 ${index !== cartItems.length - 1 ? 'border-b border-teamax-border' : ''} hover:bg-white/5 transition-colors`}>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex-1">
-                <h3 className="text-lg font-serif font-medium text-natalna-dark mb-1">{item.name}</h3>
-                {item.selectedVariation && (
-                  <p className="text-sm text-natalna-secondary mb-1">Size: {item.selectedVariation.name}</p>
-                )}
-                {item.selectedAddOns && item.selectedAddOns.length > 0 && (
-                  <p className="text-sm text-natalna-secondary mb-1">
-                    Add-ons: {item.selectedAddOns.map(addOn => 
-                      addOn.quantity && addOn.quantity > 1 
-                        ? `${addOn.name} x${addOn.quantity}`
-                        : addOn.name
-                    ).join(', ')}
-                  </p>
-                )}
-                <p className="text-lg font-semibold text-natalna-primary">₱{item.totalPrice} each</p>
+                <h3 className="text-xl font-serif font-bold text-white mb-2">{item.name}</h3>
+                <div className="space-y-1">
+                  {item.selectedVariation && (
+                    <p className="text-xs text-teamax-secondary font-bold uppercase tracking-wider">Size: <span className="text-teamax-accent">{item.selectedVariation.name}</span></p>
+                  )}
+                  {item.selectedAddOns && item.selectedAddOns.length > 0 && (
+                    <p className="text-xs text-teamax-secondary font-bold uppercase tracking-wider">
+                      Add-ons: <span className="text-teamax-accent">{item.selectedAddOns.map(addOn =>
+                        addOn.quantity && addOn.quantity > 1
+                          ? `${addOn.name} (x${addOn.quantity})`
+                          : addOn.name
+                      ).join(', ')}</span>
+                    </p>
+                  )}
+                </div>
+                <p className="text-lg font-bold text-teamax-accent mt-3">₱{item.totalPrice.toFixed(2)}</p>
               </div>
-              
-              <div className="flex items-center space-x-4 ml-4">
-                <div className="flex items-center space-x-3 bg-natalna-cream rounded-full p-1 border border-natalna-beige">
+
+              <div className="flex items-center justify-between md:justify-end space-x-6">
+                <div className="flex items-center space-x-4 bg-teamax-dark rounded-2xl p-1.5 border border-teamax-border">
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    className="p-2 hover:bg-natalna-beige rounded-full transition-colors duration-200"
+                    className="p-2 hover:bg-teamax-light rounded-xl transition-all text-white"
                   >
-                    <Minus className="h-4 w-4 text-natalna-dark" />
+                    <Minus className="h-4 w-4" />
                   </button>
-                  <span className="font-semibold text-natalna-dark min-w-[32px] text-center">{item.quantity}</span>
+                  <span className="font-bold text-white min-w-[32px] text-center text-lg">{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="p-2 hover:bg-natalna-beige rounded-full transition-colors duration-200"
+                    className="p-2 hover:bg-teamax-light rounded-xl transition-all text-white"
                   >
-                    <Plus className="h-4 w-4 text-natalna-dark" />
+                    <Plus className="h-4 w-4" />
                   </button>
                 </div>
-                
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-natalna-dark">₱{item.totalPrice * item.quantity}</p>
+
+                <div className="text-right min-w-[100px]">
+                  <p className="text-xl font-bold text-white">₱{(item.totalPrice * item.quantity).toFixed(2)}</p>
                 </div>
-                
+
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="p-2 text-natalna-terracotta hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
+                  className="p-3 text-red-500/50 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                  title="Remove item"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -112,15 +115,15 @@ const Cart: React.FC<CartProps> = ({
         ))}
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center justify-between text-2xl font-serif font-semibold text-natalna-dark mb-6">
+      <div className="bg-teamax-surface rounded-3xl shadow-2xl p-8 border border-teamax-border">
+        <div className="flex items-center justify-between text-3xl font-serif font-bold text-white mb-8">
           <span>Total:</span>
-          <span className="text-natalna-primary">₱{(getTotalPrice() || 0).toFixed(2)}</span>
+          <span className="text-teamax-accent">₱{(getTotalPrice() || 0).toFixed(2)}</span>
         </div>
-        
+
         <button
           onClick={onCheckout}
-          className="w-full bg-gradient-to-r from-natalna-primary to-natalna-wood text-white py-4 rounded-xl hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 transform hover:scale-[1.02] font-medium text-lg shadow-lg"
+          className="w-full bg-teamax-accent text-white py-5 rounded-2xl hover:brightness-110 transition-all font-bold text-lg uppercase tracking-widest shadow-xl shadow-teamax-accent/20"
         >
           Proceed to Checkout
         </button>

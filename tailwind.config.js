@@ -4,22 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        natalna: {
-          primary: '#2D7A4F',      // Forest green - main brand color
-          secondary: '#4A9D6F',    // Medium green - accent
-          accent: '#6BBF8F',       // Mint green - highlights
-          dark: '#1B4332',         // Deep forest - text
-          cream: '#F1F8F5',        // Mint cream - background
-          beige: '#E8F5ED',        // Soft mint - cards
-          gold: '#85C9A0',         // Light sage - premium touches
-          sage: '#52B788',         // Fresh sage - natural accent
-          terracotta: '#74C69D',   // Seafoam green
-          wood: '#1E5C3A'          // Rich emerald tone
+        teamax: {
+          primary: '#1e293b',      // Blueprint Dark (Slate 800)
+          secondary: '#64748b',    // Blueprint Gray Soft (Slate 500)
+          accent: '#1e40af',       // Blueprint Blue (Blue 800)
+          dark: '#fefefe',         // Blueprint Off-White (Main Background)
+          surface: '#f8fafc',      // Blueprint Cream (Light Cards/Header)
+          border: '#cbd5e1',       // Blueprint Border (Slate 300)
+          light: '#e2e8f0',        // Lighter elements (Slate 200)
+          gold: '#3b82f6',         // Secondary Accent (Blue 500)
+          warm: '#f1f5f9'          // Secondary Background (Slate 100)
         }
       },
       fontFamily: {
-        'serif': ['Playfair Display', 'Georgia', 'serif'],
-        'sans': ['Lato', 'Inter', 'system-ui', 'sans-serif']
+        'serif': ['Montserrat', 'system-ui', 'sans-serif'],
+        'sans': ['Montserrat', 'system-ui', 'sans-serif']
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

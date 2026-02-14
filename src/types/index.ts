@@ -74,4 +74,22 @@ export interface SiteSettings {
   site_description: string;
   currency: string;
   currency_code: string;
+  hero_image: string;
+  hero_title: string;
+  hero_subtitle: string;
+  hero_description: string;
+  store_hours: string;
+  contact_number: string;
+  address: string;
+  facebook_url: string;
+  facebook_handle: string;
+  site_tagline: string;
+  hero_slides?: HeroSlide[];
+}
+
+export interface HeroSlide {
+  url: string;
+  title: string;
+  subtitle: string;
+  description: string;
 }

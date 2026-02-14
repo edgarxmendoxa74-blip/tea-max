@@ -9,11 +9,11 @@ interface MenuItemCardProps {
   onUpdateQuantity: (id: string, quantity: number) => void;
 }
 
-const MenuItemCard: React.FC<MenuItemCardProps> = ({ 
-  item, 
-  onAddToCart, 
-  quantity, 
-  onUpdateQuantity 
+const MenuItemCard: React.FC<MenuItemCardProps> = ({
+  item,
+  onAddToCart,
+  quantity,
+  onUpdateQuantity
 }) => {
   const [showCustomization, setShowCustomization] = useState(false);
   const [selectedVariation, setSelectedVariation] = useState<Variation | undefined>(
@@ -43,7 +43,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
   const handleCustomizedAddToCart = () => {
     // Convert selectedAddOns back to regular AddOn array for cart
-    const addOnsForCart: AddOn[] = selectedAddOns.flatMap(addOn => 
+    const addOnsForCart: AddOn[] = selectedAddOns.flatMap(addOn =>
       Array(addOn.quantity).fill({ ...addOn, quantity: undefined })
     );
     onAddToCart(item, 1, selectedVariation, addOnsForCart);
@@ -64,12 +64,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const updateAddOnQuantity = (addOn: AddOn, quantity: number) => {
     setSelectedAddOns(prev => {
       const existingIndex = prev.findIndex(a => a.id === addOn.id);
-      
+
       if (quantity === 0) {
         // Remove add-on if quantity is 0
         return prev.filter(a => a.id !== addOn.id);
       }
-      
+
       if (existingIndex >= 0) {
         // Update existing add-on quantity
         const updated = [...prev];
@@ -93,177 +93,144 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
   return (
     <>
-      <div className={`bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group animate-scale-in border border-gray-100 ${!item.available ? 'opacity-60' : ''}`}>
+      <div className={`bg-teamax-surface rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group animate-scale-in border border-teamax-border ${!item.available ? 'opacity-60' : ''}`}>
         {/* Image Container with Badges */}
-        <div className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="relative h-48 bg-teamax-dark overflow-hidden">
           {item.image ? (
             <img
               src={item.image}
               alt={item.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
-              decoding="async"
-              fetchpriority="low"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-              }}
             />
-          ) : null}
-          <div className={`absolute inset-0 flex items-center justify-center ${item.image ? 'hidden' : ''}`}>
-            <div className="text-6xl opacity-20 text-gray-400">☕</div>
-          </div>
-          
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">☕</div>
+          )}
+
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {item.isOnDiscount && item.discountPrice && (
-              <div className="bg-gradient-to-r from-natalna-terracotta to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
+              <div className="bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
                 SALE
               </div>
             )}
             {item.popular && (
-              <div className="bg-gradient-to-r from-natalna-gold to-natalna-accent text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+              <div className="bg-teamax-accent text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
                 ⭐ POPULAR
               </div>
             )}
           </div>
-          
+
           {!item.available && (
-            <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">
               UNAVAILABLE
             </div>
           )}
-          
-          {/* Discount Percentage Badge */}
-          {item.isOnDiscount && item.discountPrice && (
-            <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-natalna-terracotta text-xs font-bold px-2 py-1 rounded-full shadow-lg">
-              {Math.round(((item.basePrice - item.discountPrice) / item.basePrice) * 100)}% OFF
-            </div>
-          )}
         </div>
-        
+
         {/* Content */}
         <div className="p-5">
-          <div className="flex items-start justify-between mb-3">
-            <h4 className="text-lg font-semibold text-gray-900 leading-tight flex-1 pr-2">{item.name}</h4>
+          <div className="flex items-start justify-between mb-2">
+            <h4 className="text-lg font-serif font-bold text-white leading-tight flex-1 pr-2">{item.name}</h4>
             {item.variations && item.variations.length > 0 && (
-              <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
+              <div className="text-[10px] text-teamax-secondary border border-teamax-border px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">
                 {item.variations.length} sizes
               </div>
             )}
           </div>
-          
-          <p className={`text-sm mb-4 leading-relaxed ${!item.available ? 'text-gray-400' : 'text-gray-600'}`}>
+
+          <p className={`text-sm mb-6 leading-relaxed line-clamp-2 ${!item.available ? 'text-gray-600' : 'text-teamax-secondary'}`}>
             {!item.available ? 'Currently Unavailable' : item.description}
           </p>
-          
+
           {/* Pricing Section */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between">
             <div className="flex-1">
               {item.isOnDiscount && item.discountPrice ? (
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl font-bold text-natalna-terracotta">
-                      ₱{item.discountPrice.toFixed(2)}
-                    </span>
-                    <span className="text-sm text-gray-500 line-through">
-                      ₱{item.basePrice.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Save ₱{(item.basePrice - item.discountPrice).toFixed(2)}
-                  </div>
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold text-teamax-accent">
+                    ₱{item.discountPrice.toFixed(2)}
+                  </span>
+                  <span className="text-xs text-gray-600 line-through">
+                    ₱{item.basePrice.toFixed(2)}
+                  </span>
                 </div>
               ) : (
-                <div className="text-2xl font-bold text-natalna-primary">
+                <div className="text-xl font-bold text-white">
                   ₱{item.basePrice.toFixed(2)}
                 </div>
               )}
-              
-              {item.variations && item.variations.length > 0 && (
-                <div className="text-xs text-gray-500 mt-1">
-                  Starting price
-                </div>
-              )}
             </div>
-            
+
             {/* Action Buttons */}
             <div className="flex-shrink-0">
               {!item.available ? (
                 <button
                   disabled
-                  className="bg-gray-200 text-gray-500 px-4 py-2.5 rounded-xl cursor-not-allowed font-medium text-sm"
+                  className="bg-teamax-light text-gray-500 px-4 py-2 rounded-xl cursor-not-allowed font-bold text-xs uppercase"
                 >
-                  Unavailable
+                  Sold Out
                 </button>
               ) : quantity === 0 ? (
                 <button
                   onClick={handleAddToCart}
-                  className="bg-gradient-to-r from-natalna-primary to-natalna-wood text-white px-6 py-2.5 rounded-xl hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 transform hover:scale-105 font-medium text-sm shadow-lg hover:shadow-xl"
+                  className="bg-black text-white px-6 py-2.5 rounded-xl hover:bg-black/90 transition-all duration-200 transform hover:scale-105 font-bold text-xs uppercase tracking-widest shadow-lg shadow-black/20"
                 >
                   {item.variations?.length || item.addOns?.length ? 'Customize' : 'Add to Cart'}
                 </button>
               ) : (
-                <div className="flex items-center space-x-2 bg-gradient-to-r from-natalna-cream to-natalna-beige rounded-xl p-1 border border-natalna-accent">
+                <div className="flex items-center space-x-3 bg-teamax-dark rounded-xl p-1 border border-teamax-border">
                   <button
                     onClick={handleDecrement}
-                    className="p-2 hover:bg-natalna-beige rounded-lg transition-colors duration-200 hover:scale-110"
+                    className="p-2 hover:bg-teamax-light rounded-lg transition-colors text-white"
                   >
-                    <Minus className="h-4 w-4 text-natalna-dark" />
+                    <Minus className="h-4 w-4" />
                   </button>
-                  <span className="font-bold text-natalna-dark min-w-[28px] text-center text-sm">{quantity}</span>
+                  <span className="font-bold text-white min-w-[20px] text-center">{quantity}</span>
                   <button
                     onClick={handleIncrement}
-                    className="p-2 hover:bg-natalna-beige rounded-lg transition-colors duration-200 hover:scale-110"
+                    className="p-2 hover:bg-teamax-light rounded-lg transition-colors text-white"
                   >
-                    <Plus className="h-4 w-4 text-natalna-dark" />
+                    <Plus className="h-4 w-4" />
                   </button>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Add-ons indicator */}
-          {item.addOns && item.addOns.length > 0 && (
-            <div className="flex items-center space-x-1 text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg">
-              <span>+</span>
-              <span>{item.addOns.length} add-on{item.addOns.length > 1 ? 's' : ''} available</span>
-            </div>
-          )}
         </div>
       </div>
 
       {/* Customization Modal */}
       {showCustomization && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between rounded-t-2xl">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-teamax-surface rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl border border-teamax-border">
+            <div className="p-6 border-b border-teamax-border flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">Customize {item.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">Choose your preferences</p>
+                <h3 className="text-xl font-serif font-bold text-white">Customize {item.name}</h3>
+                <p className="text-sm text-teamax-secondary mt-0.5 font-sans">Choose your preferences</p>
               </div>
               <button
                 onClick={() => setShowCustomization(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                className="p-2 hover:bg-teamax-light rounded-full transition-colors"
+                title="Close"
               >
-                <X className="h-5 w-5 text-gray-500" />
+                <X className="h-6 w-6 text-teamax-secondary" />
               </button>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)] custom-scrollbar">
               {/* Size Variations */}
               {item.variations && item.variations.length > 0 && (
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-4">Choose Size</h4>
-                  <div className="space-y-3">
+                <div className="mb-8">
+                  <h4 className="text-xs font-bold text-teamax-secondary uppercase tracking-widest mb-4">Choose Size</h4>
+                  <div className="space-y-2">
                     {item.variations.map((variation) => (
                       <label
                         key={variation.id}
-                        className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          selectedVariation?.id === variation.id
-                            ? 'border-natalna-primary bg-natalna-cream'
-                            : 'border-gray-200 hover:border-natalna-secondary hover:bg-gray-50'
-                        }`}
+                        className={`flex items-center justify-between p-4 border rounded-2xl cursor-pointer transition-all duration-200 ${selectedVariation?.id === variation.id
+                          ? 'border-teamax-accent bg-teamax-accent/10'
+                          : 'border-teamax-border hover:border-teamax-secondary bg-teamax-dark/50'
+                          }`}
                       >
                         <div className="flex items-center space-x-3">
                           <input
@@ -271,12 +238,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                             name="variation"
                             checked={selectedVariation?.id === variation.id}
                             onChange={() => setSelectedVariation(variation)}
-                            className="text-natalna-primary focus:ring-natalna-primary"
+                            className="w-4 h-4 accent-teamax-accent"
                           />
-                          <span className="font-medium text-gray-900">{variation.name}</span>
+                          <span className="font-medium text-white">{variation.name}</span>
                         </div>
-                        <span className="text-gray-900 font-semibold">
-                          ₱{((item.effectivePrice || item.basePrice) + variation.price).toFixed(2)}
+                        <span className="text-teamax-accent font-bold">
+                          +₱{variation.price.toFixed(2)}
                         </span>
                       </label>
                     ))}
@@ -287,85 +254,78 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
               {/* Add-ons */}
               {groupedAddOns && Object.keys(groupedAddOns).length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-4">Add-ons</h4>
+                  <h4 className="text-xs font-bold text-teamax-secondary uppercase tracking-widest mb-4">Add-ons</h4>
                   {Object.entries(groupedAddOns).map(([category, addOns]) => (
                     <div key={category} className="mb-4">
-                      <h5 className="text-sm font-medium text-gray-700 mb-3 capitalize">
+                      <h5 className="text-[10px] font-bold text-teamax-secondary mb-3 uppercase tracking-wider opacity-70">
                         {category.replace('-', ' ')}
                       </h5>
-                      <div className="space-y-3">
-                        {addOns.map((addOn) => (
-                          <div
-                            key={addOn.id}
-                            className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
-                          >
-                            <div className="flex-1">
-                              <span className="font-medium text-gray-900">{addOn.name}</span>
-                              <div className="text-sm text-gray-600">
-                                {addOn.price > 0 ? `₱${addOn.price.toFixed(2)} each` : 'Free'}
+                      <div className="space-y-2">
+                        {addOns.map((addOn) => {
+                          const existing = selectedAddOns.find(a => a.id === addOn.id);
+                          return (
+                            <div
+                              key={addOn.id}
+                              className={`flex items-center justify-between p-3 border rounded-2xl transition-all ${existing ? 'border-teamax-accent bg-teamax-accent/5' : 'border-teamax-border bg-teamax-dark/30'
+                                }`}
+                            >
+                              <div className="flex-1">
+                                <span className="font-medium text-white text-sm">{addOn.name}</span>
+                                {addOn.price > 0 && (
+                                  <div className="text-xs text-teamax-accent font-bold">
+                                    +₱{addOn.price.toFixed(2)}
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex items-center">
+                                {existing ? (
+                                  <div className="flex items-center space-x-3 bg-teamax-dark rounded-xl p-1 border border-teamax-border">
+                                    <button
+                                      type="button"
+                                      onClick={() => updateAddOnQuantity(addOn, existing.quantity - 1)}
+                                      className="p-1 hover:bg-teamax-light rounded-lg text-white"
+                                    >
+                                      <Minus className="h-3.5 w-3.5" />
+                                    </button>
+                                    <span className="font-bold text-white text-xs min-w-[16px] text-center">
+                                      {existing.quantity}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateAddOnQuantity(addOn, existing.quantity + 1)}
+                                      className="p-1 hover:bg-teamax-light rounded-lg text-white"
+                                    >
+                                      <Plus className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => updateAddOnQuantity(addOn, 1)}
+                                    className="p-2 border border-teamax-border hover:border-teamax-accent rounded-xl text-teamax-secondary hover:text-teamax-accent transition-all"
+                                  >
+                                    <Plus className="h-4 w-4" />
+                                  </button>
+                                )}
                               </div>
                             </div>
-                            
-                            <div className="flex items-center space-x-2">
-                              {selectedAddOns.find(a => a.id === addOn.id) ? (
-                                <div className="flex items-center space-x-2 bg-natalna-cream rounded-xl p-1 border border-natalna-accent">
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      const current = selectedAddOns.find(a => a.id === addOn.id);
-                                      updateAddOnQuantity(addOn, (current?.quantity || 1) - 1);
-                                    }}
-                                    className="p-1.5 hover:bg-natalna-beige rounded-lg transition-colors duration-200"
-                                  >
-                                    <Minus className="h-3 w-3 text-natalna-primary" />
-                                  </button>
-                                  <span className="font-semibold text-gray-900 min-w-[24px] text-center text-sm">
-                                    {selectedAddOns.find(a => a.id === addOn.id)?.quantity || 0}
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      const current = selectedAddOns.find(a => a.id === addOn.id);
-                                      updateAddOnQuantity(addOn, (current?.quantity || 0) + 1);
-                                    }}
-                                    className="p-1.5 hover:bg-natalna-beige rounded-lg transition-colors duration-200"
-                                  >
-                                    <Plus className="h-3 w-3 text-natalna-primary" />
-                                  </button>
-                                </div>
-                              ) : (
-                                <button
-                                  type="button"
-                                  onClick={() => updateAddOnQuantity(addOn, 1)}
-                                  className="flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-natalna-primary to-natalna-wood text-white rounded-xl hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 text-sm font-medium shadow-lg"
-                                >
-                                  <Plus className="h-3 w-3" />
-                                  <span>Add</span>
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
                 </div>
               )}
+            </div>
 
-              {/* Price Summary */}
-              <div className="border-t border-gray-200 pt-4 mb-6">
-                <div className="flex items-center justify-between text-2xl font-bold text-gray-900">
-                  <span>Total:</span>
-                  <span className="text-natalna-primary">₱{calculatePrice().toFixed(2)}</span>
-                </div>
-              </div>
-
+            <div className="p-6 border-t border-teamax-border bg-teamax-dark/50">
               <button
                 onClick={handleCustomizedAddToCart}
-                className="w-full bg-gradient-to-r from-natalna-primary to-natalna-wood text-white py-4 rounded-xl hover:from-natalna-wood hover:to-natalna-wood transition-all duration-200 font-semibold flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-black text-white py-4 rounded-2xl hover:bg-black/90 transition-all font-bold flex items-center justify-center space-x-3 shadow-xl transform hover:scale-[1.02] shadow-black/20"
               >
                 <ShoppingCart className="h-5 w-5" />
-                <span>Add to Cart - ₱{calculatePrice().toFixed(2)}</span>
+                <span className="uppercase tracking-widest text-sm">Add to Cart • ₱{calculatePrice().toFixed(2)}</span>
               </button>
             </div>
           </div>
