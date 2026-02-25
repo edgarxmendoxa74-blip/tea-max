@@ -52,47 +52,46 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
       : '';
 
     return `
-🛒 ${siteSettings?.site_name || "Tea Max Milk Tea Hub"} ORDER
+${siteSettings?.site_name || "Tea Max Milk Tea Hub"} ORDER
 
-👤 Customer: ${customerName}
-📞 Contact: ${contactNumber}
-📍 Service: ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}
-${serviceType === 'delivery' ? `🏠 Address: ${address}${landmark ? `\n🗺️ Landmark: ${landmark}` : ''}` : ''}
-${serviceType === 'pickup' ? `⏰ Pickup Time: ${timeInfo}` : ''}
+Customer: ${customerName}
+Contact: ${contactNumber}
+Service: ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}
+${serviceType === 'delivery' ? `Address: ${address}${landmark ? `\nLandmark: ${landmark}` : ''}` : ''}
+${serviceType === 'pickup' ? `Pickup Time: ${timeInfo}` : ''}
 
 
 
-📋 ORDER DETAILS:
+ORDER DETAILS:
 ${cartItems.map(item => {
-      let itemDetails = `• ${item.name}`;
+      let itemName = item.name;
       if (item.selectedVariation) {
-        itemDetails += ` (${item.selectedVariation.name})`;
+        itemName += ` (${item.selectedVariation.name})`;
       }
       if (item.selectedFlavor) {
-        itemDetails += ` (${item.selectedFlavor})`;
+        itemName += ` (${item.selectedFlavor})`;
       }
       if (item.selectedAddOns && item.selectedAddOns.length > 0) {
-        itemDetails += ` + ${item.selectedAddOns.map(addOn =>
+        itemName += ` + ${item.selectedAddOns.map(addOn =>
           addOn.quantity && addOn.quantity > 1
             ? `${addOn.name} x${addOn.quantity}`
             : addOn.name
         ).join(', ')}`;
       }
-      itemDetails += ` x${item.quantity} - ₱${item.totalPrice * item.quantity}`;
-      return itemDetails;
-    }).join('\n')}
+      return `${item.quantity} x ${itemName} ₱${item.totalPrice * item.quantity}`;
+    }).join('\n\n')}
 
-💰 TOTAL: ₱${totalPrice}
-${serviceType === 'delivery' ? `🛵 DELIVERY FEE:` : ''}
-💳 Payment: ${selectedPaymentMethod?.name || paymentMethod}
+TOTAL: ₱${totalPrice}
+${serviceType === 'delivery' ? `DELIVERY FEE:` : ''}
+Payment: ${selectedPaymentMethod?.name || paymentMethod}
 ${paymentMethod !== 'cod'
-        ? '📸 Payment Screenshot: Please attach your payment receipt screenshot'
-        : '💵 Payment Status: Cash on Delivery'
+        ? 'Payment Screenshot: Please attach your payment receipt screenshot'
+        : 'Payment Status: Cash on Delivery'
       }
 
-${notes ? `📝 Notes: ${notes}` : ''}
+${notes ? `Notes: ${notes}` : ''}
 
-Please confirm this order to proceed. Thank you for choosing ${siteSettings?.site_name || "Tea Max Milk Tea Hub"}! 🍽️
+Please confirm this order to proceed. Thank you for choosing ${siteSettings?.site_name || "Tea Max Milk Tea Hub"}!
     `.trim();
   };
 
