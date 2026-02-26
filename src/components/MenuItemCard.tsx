@@ -46,15 +46,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
     // Check if we need to combine flavors (e.g., chicken wings category)
     const isWings = item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings');
-    const isTwoFlavorItem = isWings;
 
     let finalFlavor = selectedFlavor;
-    if (isTwoFlavorItem && selectedFlavor && selectedFlavor2) {
-      if (selectedFlavor === selectedFlavor2) {
-        finalFlavor = selectedFlavor;
-      } else {
-        finalFlavor = `${selectedFlavor} & ${selectedFlavor2}`;
-      }
+    if (isWings && selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2) {
+      finalFlavor = `${selectedFlavor} & ${selectedFlavor2}`;
+    } else if (isWings) {
+      finalFlavor = selectedFlavor || selectedFlavor2;
     }
 
     onAddToCart(item, localQuantity, selectedVariation, selectedAddOns, finalFlavor);
@@ -142,52 +139,49 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           {item.flavors && item.flavors.length > 0 && (
             <div className="mb-8">
               {(item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings')) ? (
-                // Logic for 2 flavors (Chicken Wings Category)
-                <div className="space-y-6">
-                  {/* First Choice */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">1st Choice of Flavor</h4>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {item.flavors.map((flavor) => (
-                        <label
-                          key={`f1-${flavor}`}
-                          onClick={() => setSelectedFlavor(flavor)}
-                          className={`group flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 border-2 ${selectedFlavor === flavor
-                            ? 'border-black bg-gray-50 shadow-md'
-                            : 'border-gray-100 bg-white hover:border-gray-200'}`}
-                        >
-                          <span className={`text-sm font-bold tracking-wider uppercase transition-colors ${selectedFlavor === flavor ? 'text-black' : 'text-gray-500 group-hover:text-black'}`}>{flavor}</span>
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${selectedFlavor === flavor ? 'border-black bg-black' : 'border-gray-300'}`}>
-                            {selectedFlavor === flavor && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
-                          </div>
-                        </label>
-                      ))}
-                    </div>
+                // Unified multi-select for chicken wings flavors (Max 2)
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Select up to 2 Flavors</h4>
+                    <span className="text-[10px] text-teamax-accent font-bold px-3 py-1 bg-teamax-accent/10 rounded-full">
+                      {(!selectedFlavor && !selectedFlavor2) ? '0/2 Selected' : (selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2 ? '2/2 Selected' : '1/2 Selected')}
+                    </span>
                   </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {item.flavors.map((flavor) => {
+                      const isSelected = selectedFlavor === flavor || selectedFlavor2 === flavor;
 
-                  {/* Second Choice */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">2nd Choice of Flavor</h4>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {item.flavors.map((flavor) => (
+                      const toggleFlavor = () => {
+                        if (selectedFlavor === flavor) {
+                          setSelectedFlavor(selectedFlavor2);
+                          setSelectedFlavor2(undefined);
+                        } else if (selectedFlavor2 === flavor) {
+                          setSelectedFlavor2(undefined);
+                        } else if (!selectedFlavor) {
+                          setSelectedFlavor(flavor);
+                        } else if (!selectedFlavor2) {
+                          setSelectedFlavor2(flavor);
+                        } else {
+                          // Replace second one if already 2 selected
+                          setSelectedFlavor2(flavor);
+                        }
+                      };
+
+                      return (
                         <label
-                          key={`f2-${flavor}`}
-                          onClick={() => setSelectedFlavor2(flavor)}
-                          className={`group flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 border-2 ${selectedFlavor2 === flavor
+                          key={flavor}
+                          onClick={toggleFlavor}
+                          className={`group flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 border-2 ${isSelected
                             ? 'border-black bg-gray-50 shadow-md'
                             : 'border-gray-100 bg-white hover:border-gray-200'}`}
                         >
-                          <span className={`text-sm font-bold tracking-wider uppercase transition-colors ${selectedFlavor2 === flavor ? 'text-black' : 'text-gray-500 group-hover:text-black'}`}>{flavor}</span>
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${selectedFlavor2 === flavor ? 'border-black bg-black' : 'border-gray-300'}`}>
-                            {selectedFlavor2 === flavor && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                          <span className={`text-sm font-bold tracking-wider uppercase transition-colors ${isSelected ? 'text-black' : 'text-gray-500 group-hover:text-black'}`}>{flavor}</span>
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${isSelected ? 'border-black bg-black' : 'border-gray-300'}`}>
+                            {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                           </div>
                         </label>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
               ) : (
