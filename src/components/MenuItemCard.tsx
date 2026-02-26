@@ -44,13 +44,14 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const handleConfirmVariation = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // Check if we need to combine flavors for 12pcs chicken wings
-    const isTwoFlavorItem = item.category === 'chicken-wings' &&
-      selectedVariation?.name.toLowerCase().includes('12');
+    // Check if we need to combine flavors (e.g., 12pcs chicken wings)
+    const isWings = item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings');
+    const is12Pcs = selectedVariation?.name.toLowerCase().includes('12');
+    const isTwoFlavorItem = isWings && is12Pcs;
 
     let finalFlavor = selectedFlavor;
     if (isTwoFlavorItem && selectedFlavor && selectedFlavor2) {
-      finalFlavor = `${selectedFlavor} + ${selectedFlavor2}`;
+      finalFlavor = `${selectedFlavor} & ${selectedFlavor2}`;
     }
 
     onAddToCart(item, localQuantity, selectedVariation, selectedAddOns, finalFlavor);
@@ -137,7 +138,8 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           {/* Flavors Section */}
           {item.flavors && item.flavors.length > 0 && (
             <div className="mb-8">
-              {item.category === 'chicken-wings' && selectedVariation?.name.toLowerCase().includes('12') ? (
+              {(item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings')) &&
+                selectedVariation?.name.toLowerCase().includes('12') ? (
                 // Logic for 2 flavors (12pcs Wings)
                 <div className="space-y-6">
                   {/* First Choice */}
