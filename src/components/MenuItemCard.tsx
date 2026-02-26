@@ -44,8 +44,8 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const handleConfirmVariation = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // Check if we need to combine flavors for 12pcs wings
-    const isTwoFlavorItem = item.name.toLowerCase().includes('wings') &&
+    // Check if we need to combine flavors for 12pcs chicken wings
+    const isTwoFlavorItem = item.category === 'chicken-wings' &&
       selectedVariation?.name.toLowerCase().includes('12');
 
     let finalFlavor = selectedFlavor;
@@ -137,7 +137,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           {/* Flavors Section */}
           {item.flavors && item.flavors.length > 0 && (
             <div className="mb-8">
-              {item.name.toLowerCase().includes('wings') && selectedVariation?.name.toLowerCase().includes('12') ? (
+              {item.category === 'chicken-wings' && selectedVariation?.name.toLowerCase().includes('12') ? (
                 // Logic for 2 flavors (12pcs Wings)
                 <div className="space-y-6">
                   {/* First Choice */}
