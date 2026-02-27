@@ -24,9 +24,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const [selectedFlavor, setSelectedFlavor] = useState<string | undefined>(
     item.flavors?.[0]
   );
-  const [selectedFlavor2, setSelectedFlavor2] = useState<string | undefined>(
-    item.flavors?.[0]
-  );
+  const [selectedFlavor2, setSelectedFlavor2] = useState<string | undefined>(undefined);
   const [selectedAddOns, setSelectedAddOns] = useState<AddOn[]>([]);
 
   const handleAddToCartClick = (e: React.MouseEvent) => {
@@ -44,14 +42,20 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const handleConfirmVariation = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // Check if we need to combine flavors (e.g., chicken wings category)
-    const isWings = item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings');
+    // Check if we need to combine flavors (e.g., wings category)
+    const itemLowerName = (item.name?.toLowerCase() || '');
+    const itemLowerCat = (item.category?.toLowerCase() || '');
+    const variationLowerName = (selectedVariation?.name?.toLowerCase() || '');
+
+    const isWings = itemLowerName.includes('wing') || itemLowerCat.includes('wing');
+    const is12pcs = itemLowerName.includes('12') || variationLowerName.includes('12');
+    const allowTwoFlavors = isWings && is12pcs;
 
     let finalFlavor = selectedFlavor;
-    if (isWings && selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2) {
+    if (allowTwoFlavors && selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2) {
       finalFlavor = `${selectedFlavor} & ${selectedFlavor2}`;
     } else if (isWings) {
-      finalFlavor = selectedFlavor || selectedFlavor2;
+      finalFlavor = selectedFlavor;
     }
 
     onAddToCart(item, localQuantity, selectedVariation, selectedAddOns, finalFlavor);
@@ -138,13 +142,13 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           {/* Flavors Section */}
           {item.flavors && item.flavors.length > 0 && (
             <div className="mb-8">
-              {(item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings')) ? (
-                // Unified multi-select for chicken wings flavors (Max 2)
+              {((item.name?.toLowerCase() || '').includes('wing') || (item.category?.toLowerCase() || '').includes('wing')) && ((item.name?.toLowerCase() || '').includes('12') || (selectedVariation?.name?.toLowerCase() || '').includes('12')) ? (
+                // Unified multi-select for wings flavors (Exactly 2 required for 12pcs)
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Select up to 2 Flavors</h4>
-                    <span className="text-[10px] text-teamax-accent font-bold px-3 py-1 bg-teamax-accent/10 rounded-full">
-                      {(!selectedFlavor && !selectedFlavor2) ? '0/2 Selected' : (selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2 ? '2/2 Selected' : '1/2 Selected')}
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Choose 2 Flavors <span className="text-red-500">*</span></h4>
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${(selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2) ? 'text-green-600 bg-green-100' : 'text-red-500 bg-red-50'}`}>
+                      {(!selectedFlavor && !selectedFlavor2) ? '0/2 Selected' : (selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2 ? '2/2 ✓' : '1/2 Selected')}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -271,14 +275,36 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                 <span className="text-3xl font-bold text-black block tracking-tight">₱{calculateTotalPrice().toFixed(2)}</span>
               </div>
             </div>
-            <button
-              onClick={handleConfirmVariation}
-              className="w-full bg-black text-white py-6 rounded-[1.5rem] hover:bg-gray-900 active:scale-95 transition-all font-bold flex items-center justify-center gap-4 shadow-2xl shadow-black/20 group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-              <ShoppingCart className="h-6 w-6" />
-              <span className="uppercase tracking-[0.2em] text-xs">Confirm & Add to Cart</span>
-            </button>
+            {(() => {
+              const itemLowerName = (item.name?.toLowerCase() || '');
+              const itemLowerCat = (item.category?.toLowerCase() || '');
+              const variationLowerName = (selectedVariation?.name?.toLowerCase() || '');
+
+              const isWingsItem = itemLowerName.includes('wing') || itemLowerCat.includes('wing');
+              const is12pcs = itemLowerName.includes('12') || variationLowerName.includes('12');
+              const needsTwoFlavors = isWingsItem && is12pcs && item.flavors && item.flavors.length > 0;
+              const hasTwoFlavors = selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2;
+              const isDisabled = needsTwoFlavors && !hasTwoFlavors;
+              return (
+                <>
+                  {isDisabled && (
+                    <p className="text-center text-red-500 text-xs font-bold mb-3 animate-pulse">⚠️ Please select exactly 2 different flavors</p>
+                  )}
+                  <button
+                    onClick={handleConfirmVariation}
+                    disabled={isDisabled}
+                    className={`w-full py-6 rounded-[1.5rem] transition-all font-bold flex items-center justify-center gap-4 shadow-2xl group relative overflow-hidden ${isDisabled
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                      : 'bg-black text-white hover:bg-gray-900 active:scale-95 shadow-black/20'
+                      }`}
+                  >
+                    {!isDisabled && <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />}
+                    <ShoppingCart className="h-6 w-6" />
+                    <span className="uppercase tracking-[0.2em] text-xs">Confirm & Add to Cart</span>
+                  </button>
+                </>
+              );
+            })()}
           </div>
         </div>
       </div>
