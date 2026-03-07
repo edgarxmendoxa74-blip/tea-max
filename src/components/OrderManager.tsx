@@ -162,11 +162,23 @@ ${itemsList}
                                             <p className="text-[10px] text-gray-500">{formatDate(order.created_at)} • {order.order_items?.length || 0} items</p>
                                         </div>
                                     </div>
-                                    <div className="text-right">
-                                        <p className="font-bold text-black">₱{order.total_price}</p>
-                                        <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">{order.payment_method}</p>
+                                    <div className="flex items-center gap-3">
+                                        <div className="text-right">
+                                            <p className="font-bold text-black">₱{order.total_price}</p>
+                                            <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">{order.payment_method}</p>
+                                        </div>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDelete(order.id);
+                                            }}
+                                            className="p-2 text-rose-500 hover:bg-rose-50 border border-rose-100 rounded-full transition-colors flex bg-white"
+                                            title="Delete Order Record"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                        <ChevronRight className={`h-5 w-5 text-gray-300 transition-transform ${selectedOrder?.id === order.id ? 'translate-x-1 text-black' : 'group-hover:translate-x-1'}`} />
                                     </div>
-                                    <ChevronRight className={`h-5 w-5 text-gray-300 transition-transform ${selectedOrder?.id === order.id ? 'translate-x-1 text-black' : 'group-hover:translate-x-1'}`} />
                                 </div>
                             </div>
                         ))
