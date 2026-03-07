@@ -28,6 +28,15 @@ body {
   background-size: 24px 24px;
 }
 
+/* Hero Slide Variables Support */
+[style*="--bg-image"] {
+  background-image: var(--bg-image) !important;
+}
+
+[style*="--slide-scale"] {
+  transform: scale(var(--slide-scale)) !important;
+}
+
 /* Custom Scrollbar for a premium feel */
 ::-webkit-scrollbar {
   width: 8px;
@@ -48,11 +57,14 @@ body {
 /* Hide scrollbar utility */
 .scrollbar-hide {
   -ms-overflow-style: none;
+  /* IE and Edge */
   scrollbar-width: none;
+  /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+  /* Chrome, Safari and Opera */
 }
 
 /* Smooth transitions for all interactive elements */
@@ -132,6 +144,7 @@ img {
 
 .animate-scale-in {
   animation: scale-in 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+  animation-delay: var(--animation-delay, 0ms);
 }
 
 .animate-fade-in {

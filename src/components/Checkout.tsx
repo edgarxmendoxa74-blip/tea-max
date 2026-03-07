@@ -4,16 +4,20 @@ import { CartItem, PaymentMethod, ServiceType } from '../types';
 import { usePaymentMethods } from '../hooks/usePaymentMethods';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 
+import { useOrders } from '../hooks/useOrders';
+
 interface CheckoutProps {
   cartItems: CartItem[];
   totalPrice: number;
   onBack: () => void;
+  onSuccess: () => void;
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) => {
+const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack, onSuccess }) => {
   const { siteSettings } = useSiteSettings();
   const { paymentMethods } = usePaymentMethods();
-  const [step, setStep] = useState<'details' | 'payment'>('details');
+  const { createOrder } = useOrders();
+  const [step, setStep] = useState<'details' | 'payment' | 'success'>('details');
   const [customerName, setCustomerName] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [serviceType, setServiceType] = useState<ServiceType>('pickup');
@@ -22,10 +26,10 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
   const [pickupTime, setPickupTime] = useState('5-10');
   const [customTime, setCustomTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('gcash');
-  const [referenceNumber, setReferenceNumber] = useState('');
   const [notes, setNotes] = useState('');
   const [showQRModal, setShowQRModal] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -44,83 +48,76 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
     setStep('payment');
   };
 
-
-
-  const generateOrderDetails = () => {
-    const timeInfo = serviceType === 'pickup'
-      ? (pickupTime === 'custom' ? customTime : `${pickupTime} minutes`)
-      : '';
-
-    return `
-${siteSettings?.site_name || "Tea Max Milk Tea Hub"} ORDER
-
-Customer: ${customerName}
-Contact: ${contactNumber}
-Service: ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}
-${serviceType === 'delivery' ? `Address: ${address}${landmark ? `\nLandmark: ${landmark}` : ''}` : ''}
-${serviceType === 'pickup' ? `Pickup Time: ${timeInfo}` : ''}
-
-
-
-ORDER DETAILS:
-${cartItems.map(item => {
-      let itemName = item.name;
-      if (item.selectedVariation) {
-        itemName += ` (${item.selectedVariation.name})`;
-      }
-      if (item.selectedFlavor) {
-        itemName += ` (${item.selectedFlavor})`;
-      }
-      if (item.selectedAddOns && item.selectedAddOns.length > 0) {
-        itemName += ` + ${item.selectedAddOns.map(addOn =>
-          addOn.quantity && addOn.quantity > 1
-            ? `${addOn.name} x${addOn.quantity}`
-            : addOn.name
-        ).join(', ')}`;
-      }
-      return `${item.quantity} x ${itemName} ₱${item.totalPrice * item.quantity}`;
-    }).join('\n\n')}
-
-TOTAL: ₱${totalPrice}
-${serviceType === 'delivery' ? `DELIVERY FEE:` : ''}
-Payment: ${selectedPaymentMethod?.name || paymentMethod}
-${paymentMethod !== 'cod'
-        ? 'Payment Screenshot: Please attach your payment receipt screenshot'
-        : 'Payment Status: Cash on Delivery'
-      }
-
-${notes ? `Notes: ${notes}` : ''}
-
-Please confirm this order to proceed. Thank you for choosing ${siteSettings?.site_name || "Tea Max Milk Tea Hub"}!
-    `.trim();
-  };
-
-  const handleCopyOrder = async () => {
-    const text = generateOrderDetails();
+  const handlePlaceOrder = async () => {
     try {
-      await navigator.clipboard.writeText(text);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy text: ', err);
+      setIsSubmitting(true);
+
+      const orderData = {
+        customerName,
+        contactNumber,
+        serviceType,
+        address: serviceType === 'delivery' ? address : undefined,
+        landmark: serviceType === 'delivery' ? landmark : undefined,
+        pickupTime: serviceType === 'pickup' ? (pickupTime === 'custom' ? customTime : `${pickupTime} mins`) : undefined,
+        paymentMethod: selectedPaymentMethod?.name || paymentMethod,
+        total: totalPrice,
+        notes,
+        items: cartItems
+      };
+
+      const result = await createOrder(orderData);
+
+      if (result.success) {
+        setStep('success');
+      } else {
+        alert('Failed to place order: ' + result.error);
+      }
+    } catch (error) {
+      alert('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
-  const handlePlaceOrder = () => {
-    const orderDetails = generateOrderDetails();
-    const encodedMessage = encodeURIComponent(orderDetails);
-    const fbHandle = siteSettings?.facebook_handle?.replace('@', '') || 'teamaxmilkteahub';
-    const messengerUrl = `https://m.me/${fbHandle}?text=${encodedMessage}`;
-
-    window.open(messengerUrl, '_blank');
-  };
-
-
-
 
   const isDetailsValid = customerName.trim() && contactNumber.trim() &&
     (serviceType !== 'delivery' || address.trim()) &&
     (serviceType !== 'pickup' || (pickupTime !== 'custom' || customTime.trim()));
+
+  if (step === 'success') {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100 animate-scale-in">
+          <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="h-10 w-10" />
+          </div>
+          <h2 className="text-3xl font-serif font-bold text-black mb-2">Order Placed Successfully!</h2>
+          <p className="text-gray-500 mb-8">Thank you, {customerName}. Your order has been received and is being processed.</p>
+
+          <div className="bg-gray-50 rounded-2xl p-6 text-left mb-8 space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Total Paid</span>
+              <span className="text-black font-bold">₱{totalPrice}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Payment Method</span>
+              <span className="text-black font-bold uppercase">{selectedPaymentMethod?.name || paymentMethod}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Service</span>
+              <span className="text-black font-bold capitalize">{serviceType}</span>
+            </div>
+          </div>
+
+          <button
+            onClick={onSuccess}
+            className="w-full py-4 bg-black text-white rounded-xl font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-all shadow-lg"
+          >
+            Back to Menu
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (step === 'details') {
     return (
@@ -444,6 +441,7 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
                   <p className="text-[10px] text-gray-400 text-center mt-2 font-medium uppercase tracking-widest">Scan to Pay</p>
                 </div>
               </div>
+
             </div>
           )}
 
@@ -490,12 +488,12 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
             </div>
           )}
 
-          {/* Reference Number */}
+          {/* Payment Guidance */}
           {paymentMethod !== 'cod' ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <h4 className="font-medium text-black mb-2">📸 Payment Proof Required</h4>
+              <h4 className="font-medium text-black mb-2">💳 Digital Payment</h4>
               <p className="text-sm text-gray-700">
-                After making your payment, please take a screenshot of your payment receipt and attach it when you send your order via Messenger.
+                Please ensure you have completed the payment via {selectedPaymentMethod?.name || 'the selected method'} before confirming your order.
               </p>
             </div>
           ) : (
@@ -506,28 +504,13 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
               </p>
             </div>
           )}
+
         </div>
 
         {/* Order Summary */}
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-serif font-medium text-black">Final Order Summary</h2>
-            <button
-              onClick={handleCopyOrder}
-              className="flex items-center space-x-2 text-sm font-medium text-teamax-accent hover:text-black transition-colors bg-teamax-accent/10 px-3 py-1.5 rounded-lg"
-            >
-              {isCopied ? (
-                <>
-                  <Check className="h-4 w-4" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-4 w-4" />
-                  <span>Copy Details</span>
-                </>
-              )}
-            </button>
           </div>
 
           <div className="space-y-4 mb-6">
@@ -589,13 +572,18 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
               e.preventDefault();
               handlePlaceOrder();
             }}
-            className="w-full py-4 rounded-xl font-bold text-lg transition-all duration-200 transform border-2 border-black bg-white text-black hover:bg-black hover:text-white active:bg-black active:text-white hover:scale-[1.01] active:scale-95 shadow-md"
+            disabled={isSubmitting}
+            className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-200 transform border-2 ${isSubmitting
+              ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
+              : 'border-black bg-white text-black hover:bg-black hover:text-white active:bg-black active:text-white hover:scale-[1.01] active:scale-95 shadow-md'
+              }`}
+
           >
-            Place Order via Messenger
+            {isSubmitting ? 'Placing Order...' : 'Confirm & Place Order'}
           </button>
 
           <p className="text-xs text-gray-500 text-center mt-3">
-            You'll be redirected to Messenger to confirm your order.
+            Your order will be saved and processed by our team.
           </p>
         </div>
       </div>
@@ -604,3 +592,4 @@ Please confirm this order to proceed. Thank you for choosing ${siteSettings?.sit
 };
 
 export default Checkout;
+

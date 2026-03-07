@@ -109,6 +109,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
               <button
                 onClick={() => setSearchTerm('')}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center text-teamax-secondary hover:text-black transition-colors"
+                title="Clear search"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -142,7 +143,8 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
                       <div
                         key={item.id}
                         className="animate-scale-in"
-                        style={{ animationDelay: `${index * 50}ms` }}
+                        /* Dynamic delay for sequence animation */
+                        style={{ '--animation-delay': `${index * 50}ms` } as React.CSSProperties}
                       >
                         <MenuItemCard
                           item={item}

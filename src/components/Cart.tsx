@@ -89,6 +89,7 @@ const Cart: React.FC<CartProps> = ({
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     className="p-2 hover:bg-teamax-light rounded-xl transition-all text-black"
+                    title="Decrease quantity"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
@@ -96,6 +97,7 @@ const Cart: React.FC<CartProps> = ({
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     className="p-2 hover:bg-teamax-light rounded-xl transition-all text-black"
+                    title="Increase quantity"
                   >
                     <Plus className="h-4 w-4" />
                   </button>

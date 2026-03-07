@@ -198,6 +198,97 @@ export type Database = {
           updated_at?: string;
         };
       };
+      orders: {
+        Row: {
+          id: string;
+          customer_name: string;
+          contact_number: string;
+          service_type: 'pickup' | 'delivery';
+          address: string | null;
+          landmark: string | null;
+          pickup_time: string | null;
+          payment_method: string;
+          reference_number: string | null;
+          total_price: number;
+          notes: string | null;
+          status: 'pending' | 'preparing' | 'completed' | 'cancelled';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          customer_name: string;
+          contact_number: string;
+          service_type: 'pickup' | 'delivery';
+          address?: string | null;
+          landmark?: string | null;
+          pickup_time?: string | null;
+          payment_method: string;
+          reference_number?: string | null;
+          total_price: number;
+          notes?: string | null;
+          status?: 'pending' | 'preparing' | 'completed' | 'cancelled';
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          customer_name?: string;
+          contact_number?: string;
+          service_type?: 'pickup' | 'delivery';
+          address?: string | null;
+          landmark?: string | null;
+          pickup_time?: string | null;
+          payment_method?: string;
+          reference_number?: string | null;
+          total_price?: number;
+          notes?: string | null;
+          status?: 'pending' | 'preparing' | 'completed' | 'cancelled';
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      order_items: {
+        Row: {
+          id: string;
+          order_id: string;
+          menu_item_id: string | null;
+          name: string;
+          quantity: number;
+          unit_price: number;
+          variation_name: string | null;
+          flavor_name: string | null;
+          add_ons: any;
+          total_item_price: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          order_id: string;
+          menu_item_id?: string | null;
+          name: string;
+          quantity: number;
+          unit_price: number;
+          variation_name?: string | null;
+          flavor_name?: string | null;
+          add_ons?: any;
+          total_item_price: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          order_id?: string;
+          menu_item_id?: string | null;
+          name?: string;
+          quantity?: number;
+          unit_price?: number;
+          variation_name?: string | null;
+          flavor_name?: string | null;
+          add_ons?: any;
+          total_item_price?: number;
+          created_at?: string;
+        };
+      };
     };
   };
 };

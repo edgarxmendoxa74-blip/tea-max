@@ -57,6 +57,7 @@ export const useCart = () => {
         return [...prev, {
           ...item,
           id: uniqueId,
+          menuItemId: item.id,
           quantity,
           selectedVariation: variation,
           selectedFlavor: flavor,

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, ArrowLeft, Coffee, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings, Database, CheckCircle2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, ArrowLeft, Coffee, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings, CheckCircle2 } from 'lucide-react';
 import { MenuItem, Variation, AddOn } from '../types';
 import { addOnCategories } from '../data/menuData';
 import { useMenu } from '../hooks/useMenu';
-import { useCategories, Category } from '../hooks/useCategories';
+import { useCategories } from '../hooks/useCategories';
+
 import ImageUpload from './ImageUpload';
 import CategoryManager from './CategoryManager';
 import PaymentMethodManager from './PaymentMethodManager';
 import SiteSettingsManager from './SiteSettingsManager';
-import { initializeDatabase } from '../utils/initializeDatabase';
+import OrderManager from './OrderManager';
+
+
 
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -18,8 +21,9 @@ const AdminDashboard: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const { menuItems, loading, addMenuItem, updateMenuItem, deleteMenuItem } = useMenu();
   const { categories } = useCategories();
-  const [currentView, setCurrentView] = useState<'dashboard' | 'items' | 'add' | 'edit' | 'categories' | 'payments' | 'settings'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'items' | 'add' | 'edit' | 'categories' | 'payments' | 'settings' | 'orders'>('dashboard');
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showBulkActions, setShowBulkActions] = useState(false);
@@ -167,21 +171,6 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  const handleSelectAll = () => {
-    if (selectedItems.length === menuItems.length) {
-      setSelectedItems([]);
-      setShowBulkActions(false);
-    } else {
-      setSelectedItems(menuItems.map(item => item.id));
-      setShowBulkActions(true);
-    }
-  };
-
-  // Update bulk actions visibility when selection changes
-  React.useEffect(() => {
-    setShowBulkActions(selectedItems.length > 0);
-  }, [selectedItems]);
-
   const addVariation = () => {
     const newVariation: Variation = {
       id: `var-${Date.now()}`,
@@ -274,26 +263,6 @@ const AdminDashboard: React.FC = () => {
     setCurrentView('dashboard');
   };
 
-  const handleInitializeDatabase = async () => {
-    if (confirm('This will add sample menu items to your database. Continue?')) {
-      setIsProcessing(true);
-      try {
-        const result = await initializeDatabase();
-        if (result.success) {
-          alert('✅ ' + result.message + '\n\nPlease refresh the page to see the new items.');
-          window.location.reload();
-        } else {
-          alert('❌ Failed to initialize database: ' + result.message);
-        }
-      } catch (error) {
-        alert('❌ Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
-      } finally {
-        setIsProcessing(false);
-      }
-    }
-  };
-
-  // Login Screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-teamax-dark flex items-center justify-center">
@@ -345,8 +314,35 @@ const AdminDashboard: React.FC = () => {
     );
   }
 
+  if (currentView === 'orders') {
+    return (
+      <div className="min-h-screen bg-teamax-dark">
+        <div className="bg-white shadow-sm border-b border-teamax-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="flex items-center space-x-2 text-black hover:text-black transition-colors duration-200"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                  <span className="font-bold uppercase tracking-widest text-[10px]">Dashboard</span>
+                </button>
+                <h1 className="text-xl font-serif font-bold text-black">Order Management</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <OrderManager />
+        </div>
+      </div>
+    );
+  }
+
   // Form View (Add/Edit)
   if (currentView === 'add' || currentView === 'edit') {
+
     return (
       <div className="min-h-screen bg-teamax-dark">
         <div className="bg-white shadow-sm border-b border-teamax-border">
@@ -415,6 +411,7 @@ const AdminDashboard: React.FC = () => {
                   value={formData.category || ''}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                  title="Item Category"
                 >
                   {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -481,6 +478,7 @@ const AdminDashboard: React.FC = () => {
                     value={formData.discountStartDate || ''}
                     onChange={(e) => setFormData({ ...formData, discountStartDate: e.target.value || undefined })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                    placeholder="Select start date"
                   />
                 </div>
 
@@ -491,6 +489,7 @@ const AdminDashboard: React.FC = () => {
                     value={formData.discountEndDate || ''}
                     onChange={(e) => setFormData({ ...formData, discountEndDate: e.target.value || undefined })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                    placeholder="Select end date"
                   />
                 </div>
               </div>
@@ -620,6 +619,7 @@ const AdminDashboard: React.FC = () => {
                     value={addOn.category}
                     onChange={(e) => updateAddOn(index, 'category', e.target.value)}
                     className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    title="Add-on Category"
                   >
                     {addOnCategories.map(cat => (
                       <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -697,6 +697,7 @@ const AdminDashboard: React.FC = () => {
                   <button
                     onClick={() => setSearchTerm('')}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-black transition-colors"
+                    title="Clear Search"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -751,6 +752,7 @@ const AdminDashboard: React.FC = () => {
                       }}
                       className="px-3 py-2 border border-teamax-border rounded-lg text-sm"
                       disabled={isProcessing}
+                      title="Bulk Category Change"
                     >
                       <option value="">Select Category</option>
                       {categories.map(cat => (
@@ -851,6 +853,7 @@ const AdminDashboard: React.FC = () => {
                                     checked={selectedItems.includes(item.id)}
                                     onChange={() => handleSelectItem(item.id)}
                                     className="w-5 h-5 rounded-lg border-2 border-teamax-border text-black focus:ring-black transition-all cursor-pointer"
+                                    title={`Select ${item.name}`}
                                   />
                                 </td>
                                 <td className="px-8 py-6">
@@ -897,12 +900,14 @@ const AdminDashboard: React.FC = () => {
                                     <button
                                       onClick={() => handleEditItem(item)}
                                       className="p-2.5 text-black hover:bg-black hover:text-white rounded-xl transition-all border border-teamax-border"
+                                      title="Edit Item"
                                     >
                                       <Edit className="h-4 w-4" />
                                     </button>
                                     <button
                                       onClick={() => handleDeleteItem(item.id)}
                                       className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl transition-all border border-red-100"
+                                      title="Delete Item"
                                     >
                                       <Trash2 className="h-4 w-4" />
                                     </button>
@@ -925,6 +930,7 @@ const AdminDashboard: React.FC = () => {
                                   checked={selectedItems.includes(item.id)}
                                   onChange={() => handleSelectItem(item.id)}
                                   className="w-5 h-5 rounded-lg border-2 border-teamax-border text-black"
+                                  title={`Select ${item.name}`}
                                 />
                                 <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 border border-teamax-border">
                                   {item.image ? (
@@ -939,8 +945,8 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                               </div>
                               <div className="flex gap-2">
-                                <button onClick={() => handleEditItem(item)} className="p-2 border border-teamax-border rounded-lg"><Edit className="h-4 w-4" /></button>
-                                <button onClick={() => handleDeleteItem(item.id)} className="p-2 border border-red-100 text-red-500 rounded-lg"><Trash2 className="h-4 w-4" /></button>
+                                <button onClick={() => handleEditItem(item)} className="p-2 border border-teamax-border rounded-lg" title="Edit Item"><Edit className="h-4 w-4" /></button>
+                                <button onClick={() => handleDeleteItem(item.id)} className="p-2 border border-red-100 text-red-500 rounded-lg" title="Delete Item"><Trash2 className="h-4 w-4" /></button>
                               </div>
                             </div>
                           </div>
@@ -1125,7 +1131,21 @@ const AdminDashboard: React.FC = () => {
               </button>
 
               <button
+                onClick={() => setCurrentView('orders')}
+                className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
+              >
+                <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">
+                  <Package className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block font-bold text-black text-sm group-hover:text-black transition-colors">Manage Orders</span>
+                  <span className="text-[10px] text-black uppercase tracking-widest opacity-60">View & Process Orders</span>
+                </div>
+              </button>
+
+              <button
                 onClick={() => setCurrentView('payments')}
+
                 className="group flex items-center gap-4 p-5 text-left border border-teamax-border rounded-2xl hover:border-black hover:bg-black/5 transition-all duration-300"
               >
                 <div className="p-3 bg-black/5 rounded-xl group-hover:bg-black group-hover:text-black transition-all">

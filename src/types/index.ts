@@ -35,6 +35,7 @@ export interface MenuItem {
 }
 
 export interface CartItem extends MenuItem {
+  menuItemId: string; // Original database UUID
   quantity: number;
   selectedVariation?: Variation;
   selectedFlavor?: string;
@@ -43,20 +44,54 @@ export interface CartItem extends MenuItem {
 }
 
 export interface OrderData {
-  items: CartItem[];
   customerName: string;
   contactNumber: string;
   serviceType: 'pickup' | 'delivery';
   address?: string;
+  landmark?: string;
   pickupTime?: string;
-  paymentMethod: 'gcash' | 'maya' | 'bank-transfer' | 'cod';
+  paymentMethod: string;
   referenceNumber?: string;
   total: number;
   notes?: string;
+  items: CartItem[];
 }
 
-export type PaymentMethod = 'gcash' | 'maya' | 'bank-transfer' | 'cod';
+export interface OrderItem {
+  id: string;
+  order_id: string;
+  menu_item_id: string | null;
+  name: string;
+  quantity: number;
+  unit_price: number;
+  variation_name?: string;
+  flavor_name?: string;
+  add_ons: any[];
+  total_item_price: number;
+  created_at: string;
+}
+
+export interface Order {
+  id: string;
+  customer_name: string;
+  contact_number: string;
+  service_type: 'pickup' | 'delivery';
+  address?: string;
+  landmark?: string;
+  pickup_time?: string;
+  payment_method: string;
+  reference_number?: string;
+  total_price: number;
+  notes?: string;
+  status: 'pending' | 'preparing' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+  order_items?: OrderItem[];
+}
+
+export type PaymentMethod = string;
 export type ServiceType = 'pickup' | 'delivery';
+
 
 // Site Settings Types
 export interface SiteSetting {

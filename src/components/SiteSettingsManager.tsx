@@ -22,7 +22,6 @@ const SiteSettingsManager: React.FC = () => {
     facebook_handle: '',
     site_tagline: ''
   });
-  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');
   const [heroSlides, setHeroSlides] = useState<Array<{
     url: string;
@@ -70,7 +69,6 @@ const SiteSettingsManager: React.FC = () => {
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLogoFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setLogoPreview(e.target?.result as string);
@@ -93,12 +91,6 @@ const SiteSettingsManager: React.FC = () => {
     const newFiles = new Map(slideFiles);
     newFiles.delete(index);
     setSlideFiles(newFiles);
-  };
-
-  const handleSlideChange = (index: number, field: string, value: string) => {
-    setHeroSlides(prev => prev.map((slide, i) =>
-      i === index ? { ...slide, [field]: value } : slide
-    ));
   };
 
   const handleSlideImageChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +130,7 @@ const SiteSettingsManager: React.FC = () => {
         currency: formData.currency,
         currency_code: formData.currency_code,
         site_logo: logoUrl,
-        hero_slides: updatedSlides,
+        hero_slides: updatedSlides as any,
         store_hours: formData.store_hours,
         contact_number: formData.contact_number,
         address: formData.address,
@@ -148,7 +140,6 @@ const SiteSettingsManager: React.FC = () => {
       });
 
       setIsEditing(false);
-      setLogoFile(null);
       // Show success notification
       const successPopup = document.createElement('div');
       successPopup.className = 'fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-bounce-gentle';
@@ -191,8 +182,6 @@ const SiteSettingsManager: React.FC = () => {
       }
     }
     setIsEditing(false);
-    setLogoFile(null);
-    setHeroFile(null);
   };
 
   if (loading) {
@@ -211,7 +200,7 @@ const SiteSettingsManager: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="bg-white rounded-xl shadow-sm p-6" >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-serif font-semibold text-teamax-dark">Site Settings</h2>
         {!isEditing ? (
@@ -361,6 +350,7 @@ const SiteSettingsManager: React.FC = () => {
                   <button
                     onClick={() => handleRemoveSlide(index)}
                     className="absolute top-4 right-4 text-red-500 hover:text-red-700 p-1 hover:bg-red-50 rounded-full transition-colors"
+                    title="Remove slide"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -378,15 +368,20 @@ const SiteSettingsManager: React.FC = () => {
                       />
                       {isEditing && (
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <label className="cursor-pointer p-2 bg-white rounded-full shadow-lg hover:bg-gray-100">
+                          <label
+                            htmlFor={`slide-upload-${index}`}
+                            className="cursor-pointer p-2 bg-white rounded-full shadow-lg hover:bg-gray-100"
+                            title="Update slide image"
+                          >
                             <Upload className="w-4 h-4 text-black" />
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={(e) => handleSlideImageChange(index, e)}
-                            />
                           </label>
+                          <input
+                            id={`slide-upload-${index}`}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleSlideImageChange(index, e)}
+                          />
                         </div>
                       )}
                     </div>
@@ -535,7 +530,7 @@ const SiteSettingsManager: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

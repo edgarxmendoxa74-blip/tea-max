@@ -83,11 +83,10 @@ const Hero: React.FC = () => {
                 }`}
             >
               <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] ease-linear"
+                className={`absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] ease-linear ${index === currentSlide ? 'scale-100' : 'scale-110'}`}
                 style={{
-                  backgroundImage: `url(${slide.url})`,
-                  transform: index === currentSlide ? 'scale(1)' : 'scale(1.1)'
-                }}
+                  '--bg-image': `url(${slide.url})`
+                } as React.CSSProperties}
               />
               {/* Overlay for better transition perception */}
               <div className="absolute inset-0 bg-gradient-to-r from-teamax-dark/30 via-transparent to-transparent md:from-teamax-dark/20" />
