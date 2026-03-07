@@ -46,7 +46,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
     // Check if we need to combine flavors (e.g., chicken wings category)
     const isWings = item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings');
-    const allowTwoFlavors = isWings && selectedVariation?.name?.toLowerCase().includes('12');
+    const allowTwoFlavors = isWings && (selectedVariation?.name?.toLowerCase().includes('12') || item.name?.toLowerCase().includes('12'));
 
     let finalFlavor = selectedFlavor;
     if (allowTwoFlavors && selectedFlavor && selectedFlavor2 && selectedFlavor !== selectedFlavor2) {
@@ -139,7 +139,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           {/* Flavors Section */}
           {item.flavors && item.flavors.length > 0 && (
             <div className="mb-8">
-              {(item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings')) && selectedVariation?.name?.toLowerCase().includes('12') ? (
+              {(item.category?.toLowerCase() === 'chicken-wings' || item.name?.toLowerCase().includes('chicken wings')) && (selectedVariation?.name?.toLowerCase().includes('12') || item.name?.toLowerCase().includes('12')) ? (
                 // Unified multi-select for chicken wings flavors (Max 2)
                 <div>
                   <div className="flex items-center justify-between mb-6">
