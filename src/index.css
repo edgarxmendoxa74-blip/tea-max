@@ -1,0 +1,179 @@
+/* Import elegant fonts - must be first */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tea Max Milk Tea Hub Custom Styles - Clean & Minimalist Aesthetic */
+
+:root {
+  --primary: #09090B;
+  --accent: #A67B5B;
+  --bg-main: #FFFFFF;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-teamax-dark text-teamax-primary antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.app-bg {
+  @apply bg-teamax-dark min-h-screen content-center;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Hero Slide Variables Support */
+[style*="--bg-image"] {
+  background-image: var(--bg-image) !important;
+}
+
+[style*="--slide-scale"] {
+  transform: scale(var(--slide-scale)) !important;
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-teamax-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-teamax-accent/20 rounded-full border-2 border-teamax-dark;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-teamax-accent/40;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
+/* Smooth transitions for all interactive elements */
+a,
+button,
+input,
+select,
+textarea {
+  @apply transition-all duration-300 ease-out;
+}
+
+button:active,
+.button-active:active {
+  transform: scale(0.97) !important;
+  opacity: 0.8 !important;
+  filter: brightness(0.9) !important;
+  transition-duration: 0s !important;
+}
+
+/* Image optimization & Smooth Loading */
+img {
+  @apply transition-opacity duration-500;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Skeleton Loading Animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+/* Smooth Scale Animation */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+  animation-delay: var(--animation-delay, 0ms);
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s infinite ease-in-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pop {
+  animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hover-pop:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
