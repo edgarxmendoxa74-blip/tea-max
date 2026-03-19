@@ -81,7 +81,7 @@ const Cart: React.FC<CartProps> = ({
                     </p>
                   )}
                 </div>
-                <p className="text-lg font-bold text-teamax-accent mt-3">₱{item.totalPrice.toFixed(2)}</p>
+                <p className="text-lg font-bold text-teamax-accent mt-3">₱{(Number(item.totalPrice) || 0).toFixed(2)}</p>
               </div>
 
               <div className="flex items-center justify-between md:justify-end space-x-6">
@@ -104,7 +104,7 @@ const Cart: React.FC<CartProps> = ({
                 </div>
 
                 <div className="text-right min-w-[100px]">
-                  <p className="text-xl font-bold text-black">₱{(item.totalPrice * item.quantity).toFixed(2)}</p>
+                  <p className="text-xl font-bold text-black">₱{(Number(item.totalPrice * item.quantity) || 0).toFixed(2)}</p>
                 </div>
 
                 <button

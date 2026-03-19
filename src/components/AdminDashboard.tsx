@@ -32,7 +32,7 @@ const AdminDashboard: React.FC = () => {
   const [formData, setFormData] = useState<Partial<MenuItem>>({
     name: '',
     description: '',
-    basePrice: 0,
+    price: 0,
     category: 'hot-coffee',
     popular: false,
     available: true,
@@ -46,7 +46,7 @@ const AdminDashboard: React.FC = () => {
     setFormData({
       name: '',
       description: '',
-      basePrice: 0,
+      price: 0,
       category: defaultCategory,
       popular: false,
       available: true,
@@ -75,7 +75,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleSaveItem = async () => {
-    if (!formData.name || !formData.description || !formData.basePrice) {
+    if (!formData.name || !formData.description || !formData.price) {
       alert('Please fill in all required fields');
       return;
     }
@@ -395,11 +395,11 @@ const AdminDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-black mb-2">Base Price *</label>
+                <label className="block text-sm font-medium text-black mb-2">Price *</label>
                 <input
                   type="number"
-                  value={formData.basePrice || ''}
-                  onChange={(e) => setFormData({ ...formData, basePrice: Number(e.target.value) })}
+                  value={formData.price || ''}
+                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                   placeholder="0"
                 />
@@ -875,11 +875,11 @@ const AdminDashboard: React.FC = () => {
                                   <div className="flex flex-col">
                                     {item.isOnDiscount && item.discountPrice ? (
                                       <>
-                                        <span className="text-black font-bold text-base">₱{item.discountPrice.toFixed(2)}</span>
-                                        <span className="text-black/30 line-through text-[10px] font-bold">₱{item.basePrice.toFixed(2)}</span>
+                                        <span className="text-black font-bold text-base">₱{(Number(item.discountPrice) || 0).toFixed(2)}</span>
+                                        <span className="text-black/30 line-through text-[10px] font-bold">₱{(Number(item.price) || 0).toFixed(2)}</span>
                                       </>
                                     ) : (
-                                      <span className="text-black font-bold text-base">₱{item.basePrice.toFixed(2)}</span>
+                                      <span className="text-black font-bold text-base">₱{(Number(item.price) || 0).toFixed(2)}</span>
                                     )}
                                   </div>
                                 </td>
@@ -941,7 +941,7 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                                 <div>
                                   <h3 className="font-bold text-black text-sm">{item.name}</h3>
-                                  <p className="text-[10px] text-black/50">₱{item.basePrice.toFixed(2)}</p>
+                                  <p className="text-[10px] text-black/50">₱{(Number(item.price) || 0).toFixed(2)}</p>
                                 </div>
                               </div>
                               <div className="flex gap-2">

@@ -70,7 +70,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   };
 
   const calculateTotalPrice = () => {
-    const variationPrice = selectedVariation ? selectedVariation.price : (item.effectivePrice || item.basePrice);
+    const variationPrice = selectedVariation ? selectedVariation.price : (item.effectivePrice || item.price);
     const addOnsTotal = selectedAddOns.reduce((sum, addOn) => sum + addOn.price, 0);
     return (variationPrice + addOnsTotal) * localQuantity;
   };
@@ -128,7 +128,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                       </div>
                       <span className={`text-base font-bold tracking-wider uppercase transition-colors ${selectedVariation?.id === v.id ? 'text-black' : 'text-gray-500 group-hover:text-black'}`}>{v.name}</span>
                     </div>
-                    <span className={`text-base font-bold transition-colors ${selectedVariation?.id === v.id ? 'text-black' : 'text-gray-400'}`}>₱{v.price.toFixed(2)}</span>
+                    <span className={`text-base font-bold transition-colors ${selectedVariation?.id === v.id ? 'text-black' : 'text-gray-400'}`}>₱{(Number(v.price) || 0).toFixed(2)}</span>
                   </label>
                 ))}
               </div>
@@ -237,7 +237,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                         </div>
                         <span className={`text-sm font-bold tracking-wider uppercase ${isSelected ? 'text-black' : 'text-gray-500'}`}>{addOn.name}</span>
                       </div>
-                      <span className={`text-sm font-bold ${isSelected ? 'text-black' : 'text-gray-400'}`}>+₱{addOn.price.toFixed(2)}</span>
+                      <span className={`text-sm font-bold ${isSelected ? 'text-black' : 'text-gray-400'}`}>+₱{(Number(addOn.price) || 0).toFixed(2)}</span>
                     </label>
                   );
                 })}
@@ -269,7 +269,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
               </div>
               <div className="text-right">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] block mb-1">Total Amount</span>
-                <span className="text-3xl font-bold text-black block tracking-tight">₱{calculateTotalPrice().toFixed(2)}</span>
+                <span className="text-3xl font-bold text-black block tracking-tight">₱{(Number(calculateTotalPrice()) || 0).toFixed(2)}</span>
               </div>
             </div>
             <button
@@ -341,11 +341,11 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           <div className="flex items-center justify-between">
             {item.isOnDiscount && item.discountPrice ? (
               <div className="flex flex-col">
-                <span className="text-base sm:text-xl font-bold text-teamax-accent">₱{item.discountPrice.toFixed(2)}</span>
-                <span className="text-[10px] sm:text-xs text-gray-600 line-through">₱{item.basePrice.toFixed(2)}</span>
+                <span className="text-base sm:text-xl font-bold text-teamax-accent">₱{(Number(item.discountPrice) || 0).toFixed(2)}</span>
+                <span className="text-[10px] sm:text-xs text-gray-600 line-through">₱{(Number(item.price) || 0).toFixed(2)}</span>
               </div>
             ) : (
-              <div className="text-base sm:text-xl font-bold text-black">₱{(item.effectivePrice || item.basePrice).toFixed(2)}</div>
+              <div className="text-base sm:text-xl font-bold text-black">₱{(Number(item.effectivePrice || item.price) || 0).toFixed(2)}</div>
             )}
 
             {item.available && (
@@ -391,6 +391,6 @@ export default memo(MenuItemCard, (prev, next) => (
   prev.item.id === next.item.id &&
   prev.quantity === next.quantity &&
   prev.item.available === next.item.available &&
-  prev.item.basePrice === next.item.basePrice &&
+  prev.item.price === next.item.price &&
   prev.item.effectivePrice === next.item.effectivePrice
 ));

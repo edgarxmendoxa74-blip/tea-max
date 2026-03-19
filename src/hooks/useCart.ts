@@ -7,11 +7,11 @@ export const useCart = () => {
 
   const calculateItemPrice = (item: MenuItem, variation?: Variation, addOns?: AddOn[]) => {
     // If a variation is selected, its price replaces the base price
-    let price = variation ? variation.price : (item.effectivePrice || item.basePrice);
+    let price = variation ? variation.price : (item.effectivePrice || item.price);
 
     // Apply discount if active on the base item
-    if (item.isOnDiscount && item.discountPrice && item.basePrice > 0) {
-      const discountAmount = item.basePrice - item.discountPrice;
+    if (item.isOnDiscount && item.discountPrice && item.price > 0) {
+      const discountAmount = item.price - item.discountPrice;
       price = Math.max(0, price - discountAmount);
     }
 
