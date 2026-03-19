@@ -71,7 +71,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
   const calculateTotalPrice = () => {
     const variationPrice = selectedVariation ? selectedVariation.price : (item.effectivePrice || item.basePrice);
-    const addOnsTotal = selectedAddOns.reduce((sum, addOn) => sum + addOn.price, 0);
+    const addOnsTotal = (selectedAddOns || []).reduce((sum, addOn) => sum + addOn.price, 0);
     return (variationPrice + addOnsTotal) * localQuantity;
   };
 

@@ -4,16 +4,6 @@ import { useCategories } from '../hooks/useCategories';
 import MenuItemCard from './MenuItemCard';
 import { Search, X } from 'lucide-react';
 
-// Preload images for better performance
-const preloadImages = (items: MenuItem[]) => {
-  items.forEach(item => {
-    if (item.image) {
-      const img = new Image();
-      img.src = item.image;
-    }
-  });
-};
-
 interface MenuProps {
   menuItems: MenuItem[];
   addToCart: (item: MenuItem, quantity?: number, variation?: any, addOns?: any[], flavor?: string) => void;
@@ -35,21 +25,6 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
       item.description?.toLowerCase().includes(term)
     );
   }, [menuItems, searchTerm]);
-
-  // Preload images when menu items change
-  useEffect(() => {
-    if (filteredMenuItems.length > 0) {
-      // Preload images for visible category first
-      const visibleItems = filteredMenuItems.filter(item => item.category === activeCategory);
-      preloadImages(visibleItems);
-
-      // Then preload other images after a short delay
-      setTimeout(() => {
-        const otherItems = filteredMenuItems.filter(item => item.category !== activeCategory);
-        preloadImages(otherItems);
-      }, 1000);
-    }
-  }, [filteredMenuItems, activeCategory]);
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -136,7 +111,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems, updateQuan
 
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
                   {categoryItems.map((item, index) => {
-                    const totalQuantity = cartItems
+                    const totalQuantity = (cartItems || [])
                       .filter(ci => ci.id === item.id || ci.id.startsWith(`${item.id}-`))
                       .reduce((sum, ci) => sum + ci.quantity, 0);
                     return (

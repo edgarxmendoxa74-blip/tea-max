@@ -27,7 +27,7 @@ export const useCart = () => {
     const totalPrice = calculateItemPrice(item, variation, addOns);
 
     // Group add-ons by name and sum their quantities
-    const groupedAddOns = addOns?.reduce((groups, addOn) => {
+    const groupedAddOns = (addOns || []).reduce((groups, addOn) => {
       const existing = groups.find(g => g.id === addOn.id);
       if (existing) {
         existing.quantity = (existing.quantity || 1) + 1;
@@ -90,11 +90,11 @@ export const useCart = () => {
   }, []);
 
   const getTotalPrice = useCallback(() => {
-    return cartItems.reduce((total, item) => total + (item.totalPrice * item.quantity), 0);
+    return (cartItems || []).reduce((total, item) => total + (item.totalPrice * item.quantity), 0);
   }, [cartItems]);
 
   const getTotalItems = useCallback(() => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+    return (cartItems || []).reduce((total, item) => total + item.quantity, 0);
   }, [cartItems]);
 
   const openCart = useCallback(() => setIsCartOpen(true), []);

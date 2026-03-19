@@ -657,7 +657,7 @@ const AdminDashboard: React.FC = () => {
     );
 
     // Group items by category
-    const groupedItems = categories.reduce((acc, cat) => {
+    const groupedItems = (categories || []).reduce((acc, cat) => {
       const itemsInCat = filteredItems.filter(item => item.category === cat.id);
       if (itemsInCat.length > 0) {
         acc[cat.id] = itemsInCat;
