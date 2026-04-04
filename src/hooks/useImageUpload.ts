@@ -1,12 +1,18 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 export const useImageUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const uploadImage = async (file: File, folder?: string): Promise<string> => {
+  const uploadImage = async (file: File): Promise<string> => {
     try {
+      if (!CLOUD_NAME || !UPLOAD_PRESET) {
+        throw new Error('Cloudinary configuration is missing. Please add VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET to your .env file.');
+      }
+
       setUploading(true);
       setUploadProgress(0);
 
@@ -22,45 +28,35 @@ export const useImageUpload = () => {
         throw new Error('Image size must be less than 5MB');
       }
 
-      // Generate unique filename with optional folder
-      const fileExt = file.name.split('.').pop();
-      const timestamp = Date.now();
-      const random = Math.random().toString(36).substring(2);
-      const fileName = folder ? `${folder}/${timestamp}-${random}.${fileExt}` : `${timestamp}-${random}.${fileExt}`;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
 
-      // Simulate upload progress
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
+      // We'll use XMLHttpRequest for progress tracking
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percentComplete = Math.round((event.loaded / event.total) * 100);
+            setUploadProgress(percentComplete);
           }
-          return prev + 10;
-        });
-      }, 100);
+        };
 
-      // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('menu-images')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: file.type
-        });
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const response = JSON.parse(xhr.responseText);
+            resolve(response.secure_url);
+          } else {
+            const response = JSON.parse(xhr.responseText);
+            reject(new Error(response.error?.message || 'Upload failed'));
+          }
+        };
 
-      clearInterval(progressInterval);
-      setUploadProgress(100);
-
-      if (error) {
-        throw error;
-      }
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('menu-images')
-        .getPublicUrl(data.path);
-
-      return publicUrl;
+        xhr.onerror = () => reject(new Error('Network error during upload'));
+        xhr.send(formData);
+      });
     } catch (error) {
       console.error('Error uploading image:', error);
       throw error;
@@ -70,23 +66,12 @@ export const useImageUpload = () => {
     }
   };
 
-  const deleteImage = async (imageUrl: string): Promise<void> => {
-    try {
-      // Extract file path from URL
-      const urlParts = imageUrl.split('/');
-      const fileName = urlParts[urlParts.length - 1];
-
-      const { error } = await supabase.storage
-        .from('menu-images')
-        .remove([fileName]);
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      console.error('Error deleting image:', error);
-      throw error;
-    }
+  const deleteImage = async (_imageUrl: string): Promise<void> => {
+    // Note: Deleting images from Cloudinary client-side with unsigned uploads is not standard
+    // and usually requires a signed request for security reasons.
+    // For now, we only clear it from the UI.
+    console.info('Image deletion from Cloudinary skipped (client-side unsigned upload).');
+    return Promise.resolve();
   };
 
   return {

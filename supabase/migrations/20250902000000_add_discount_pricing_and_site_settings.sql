@@ -92,11 +92,21 @@ CREATE TRIGGER update_site_settings_updated_at
 
 -- Insert default site settings
 INSERT INTO site_settings (id, value, type, description) VALUES
-  ('site_name', 'Beracah Cafe', 'text', 'The name of the cafe/restaurant'),
+  ('site_name', 'Tea Max Milk Tea Hub', 'text', 'The name of the cafe/restaurant'),
   ('site_logo', 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop', 'image', 'The logo image URL for the site'),
-  ('site_description', 'Welcome to Beracah Cafe - Your perfect coffee destination', 'text', 'Short description of the cafe'),
-  ('currency', 'PHP', 'text', 'Currency symbol for prices'),
-  ('currency_code', 'PHP', 'text', 'Currency code for payments')
+  ('site_description', 'Simple ingredients, exceptional taste. Discover our curated selection of handcrafted beverages at Tea Max Milk Tea Hub.', 'text', 'Short description of the cafe'),
+  ('site_tagline', 'Milk Tea Hub', 'text', 'Short tagline shown under the site name'),
+  ('currency', '₱', 'text', 'Currency symbol for prices'),
+  ('currency_code', 'PHP', 'text', 'Currency code for payments'),
+  ('hero_image', 'https://images.unsplash.com/photo-1544787210-22dbdc1763f6?q=80&w=2070&auto=format&fit=crop', 'image', 'Hero section background image'),
+  ('hero_title', 'Pure Milk Tea &', 'text', 'Hero section main title'),
+  ('hero_subtitle', 'Finest Coffee', 'text', 'Hero section subtitle'),
+  ('hero_description', 'Simple ingredients, exceptional taste. Discover our curated selection of handcrafted beverages at Tea Max Milk Tea Hub.', 'text', 'Hero section description text'),
+  ('store_hours', '06:00 AM - 10:00 PM', 'text', 'Store operating hours'),
+  ('contact_number', '0945 210 6254', 'text', 'Contact phone number'),
+  ('address', 'Purok 3 Barangay Trenchera, Tayug Pangasinan', 'text', 'Store address'),
+  ('facebook_url', 'https://www.facebook.com/teamaxmilkteahub', 'text', 'Facebook page URL'),
+  ('facebook_handle', '@teamaxmilkteahub', 'text', 'Facebook page handle')
 ON CONFLICT (id) DO NOTHING;
 
 -- Create function to check if discount is active

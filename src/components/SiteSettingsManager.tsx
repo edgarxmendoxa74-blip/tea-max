@@ -117,7 +117,7 @@ const SiteSettingsManager: React.FC = () => {
       const updatedSlides = await Promise.all(heroSlides.map(async (slide, index) => {
         const file = slideFiles.get(index);
         if (file) {
-          const uploadedUrl = await uploadImage(file, `hero-slide-${index}-${Date.now()}`);
+          const uploadedUrl = await uploadImage(file);
           return { ...slide, url: uploadedUrl };
         }
         return slide;

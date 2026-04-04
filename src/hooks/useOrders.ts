@@ -16,7 +16,8 @@ export const useOrders = () => {
           *,
           order_items (*)
         `)
-                .order('created_at', { ascending: false });
+                .order('created_at', { ascending: false })
+                .limit(50); // Optimization: Fetch only latest 50 orders
 
             if (fetchError) throw fetchError;
             setOrders(data || []);
